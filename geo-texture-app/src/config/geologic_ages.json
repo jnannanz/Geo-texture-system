@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Quaternary",
+    "symbol": "Q",
+    "cmyk": "007",
+    "hex": "#FFFF4D"
+  },
+  {
+    "name": "Tertiary",
+    "symbol": "T",
+    "cmyk": "037",
+    "hex": "#FFB24D"
+  },
+  {
+    "name": "Cretaceous",
+    "symbol": "K",
+    "cmyk": "507",
+    "hex": "#80FF4D"
+  },
+  {
+    "name": "Jurassic",
+    "symbol": "J",
+    "cmyk": "604",
+    "hex": "#66FF99"
+  },
+  {
+    "name": "Triassic",
+    "symbol": "Tr",
+    "cmyk": "602",
+    "hex": "#66FFCC"
+  },
+  {
+    "name": "Permian",
+    "symbol": "P",
+    "cmyk": "600",
+    "hex": "#66FFFF"
+  },
+  {
+    "name": "Pennsylvanian",
+    "symbol": "IP",
+    "cmyk": "620",
+    "hex": "#66CCFF"
+  },
+  {
+    "name": "Mississippian",
+    "symbol": "M",
+    "cmyk": "431",
+    "hex": "#99B2DE"
+  },
+  {
+    "name": "Devonian",
+    "symbol": "D",
+    "cmyk": "540",
+    "hex": "#8099FF"
+  },
+  {
+    "name": "Silurian",
+    "symbol": "S",
+    "cmyk": "350",
+    "hex": "#B280FF"
+  },
+  {
+    "name": "Ordovician",
+    "symbol": "O",
+    "cmyk": "051",
+    "hex": "#FF80DE"
+  },
+  {
+    "name": "Cambrian",
+    "symbol": "C",
+    "cmyk": "054",
+    "hex": "#FF8099"
+  },
+  {
+    "name": "Precambrian",
+    "symbol": "pC",
+    "cmyk": "446",
+    "hex": "#999966"
+  }
+]

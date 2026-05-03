@@ -1,0 +1,902 @@
+[
+  {
+    "number": 1,
+    "label": "Soil, silt, or alluvium",
+    "bbox": [
+      555,
+      374,
+      821,
+      512
+    ],
+    "svg": "rock_legend_vectors/svg/legend_01_soil_silt_or_alluvium.svg",
+    "png": "rock_legend_vectors/png_crops/legend_01_soil_silt_or_alluvium.png"
+  },
+  {
+    "number": 2,
+    "label": "Sand",
+    "bbox": [
+      1111,
+      375,
+      1374,
+      520
+    ],
+    "svg": "rock_legend_vectors/svg/legend_02_sand.svg",
+    "png": "rock_legend_vectors/png_crops/legend_02_sand.png"
+  },
+  {
+    "number": 3,
+    "label": "Gravel and stratified drift",
+    "bbox": [
+      1650,
+      382,
+      1916,
+      520
+    ],
+    "svg": "rock_legend_vectors/svg/legend_03_gravel_and_stratified_drift.svg",
+    "png": "rock_legend_vectors/png_crops/legend_03_gravel_and_stratified_drift.png"
+  },
+  {
+    "number": 4,
+    "label": "Glacial till and moraines a",
+    "bbox": [
+      2200,
+      386,
+      2466,
+      523
+    ],
+    "svg": "rock_legend_vectors/svg/legend_04_glacial_till_and_moraines_a.svg",
+    "png": "rock_legend_vectors/png_crops/legend_04_glacial_till_and_moraines_a.png"
+  },
+  {
+    "number": 5,
+    "label": "Glacial till and moraines b",
+    "bbox": [
+      2751,
+      376,
+      3007,
+      519
+    ],
+    "svg": "rock_legend_vectors/svg/legend_05_glacial_till_and_moraines_b.svg",
+    "png": "rock_legend_vectors/png_crops/legend_05_glacial_till_and_moraines_b.png"
+  },
+  {
+    "number": 6,
+    "label": "Loess",
+    "bbox": [
+      3295,
+      380,
+      3562,
+      518
+    ],
+    "svg": "rock_legend_vectors/svg/legend_06_loess.svg",
+    "png": "rock_legend_vectors/png_crops/legend_06_loess.png"
+  },
+  {
+    "number": 7,
+    "label": "Conglomerate",
+    "bbox": [
+      266,
+      658,
+      532,
+      797
+    ],
+    "svg": "rock_legend_vectors/svg/legend_07_conglomerate.svg",
+    "png": "rock_legend_vectors/png_crops/legend_07_conglomerate.png"
+  },
+  {
+    "number": 8,
+    "label": "Massive sandstone",
+    "bbox": [
+      637,
+      655,
+      903,
+      795
+    ],
+    "svg": "rock_legend_vectors/svg/legend_08_massive_sandstone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_08_massive_sandstone.png"
+  },
+  {
+    "number": 9,
+    "label": "Bedded sandstone",
+    "bbox": [
+      1010,
+      655,
+      1278,
+      797
+    ],
+    "svg": "rock_legend_vectors/svg/legend_09_bedded_sandstone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_09_bedded_sandstone.png"
+  },
+  {
+    "number": 10,
+    "label": "Cross-bedded sandstone",
+    "bbox": [
+      1381,
+      663,
+      1635,
+      805
+    ],
+    "svg": "rock_legend_vectors/svg/legend_10_cross_bedded_sandstone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_10_cross_bedded_sandstone.png"
+  },
+  {
+    "number": 11,
+    "label": "Quartzite",
+    "bbox": [
+      1740,
+      662,
+      2004,
+      800
+    ],
+    "svg": "rock_legend_vectors/svg/legend_11_quartzite.svg",
+    "png": "rock_legend_vectors/png_crops/legend_11_quartzite.png"
+  },
+  {
+    "number": 12,
+    "label": "Thin-bedded or shaly sandstone",
+    "bbox": [
+      2109,
+      665,
+      2375,
+      803
+    ],
+    "svg": "rock_legend_vectors/svg/legend_12_thin_bedded_or_shaly_sandstone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_12_thin_bedded_or_shaly_sandstone.png"
+  },
+  {
+    "number": 13,
+    "label": "Calcareous sandstone",
+    "bbox": [
+      2480,
+      658,
+      2746,
+      801
+    ],
+    "svg": "rock_legend_vectors/svg/legend_13_calcareous_sandstone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_13_calcareous_sandstone.png"
+  },
+  {
+    "number": 14,
+    "label": "Sandy limestone",
+    "bbox": [
+      2843,
+      661,
+      3108,
+      799
+    ],
+    "svg": "rock_legend_vectors/svg/legend_14_sandy_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_14_sandy_limestone.png"
+  },
+  {
+    "number": 15,
+    "label": "Massively bedded limestone",
+    "bbox": [
+      3213,
+      661,
+      3479,
+      798
+    ],
+    "svg": "rock_legend_vectors/svg/legend_15_massively_bedded_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_15_massively_bedded_limestone.png"
+  },
+  {
+    "number": 16,
+    "label": "Thin-bedded limestone",
+    "bbox": [
+      3588,
+      661,
+      3854,
+      796
+    ],
+    "svg": "rock_legend_vectors/svg/legend_16_thin_bedded_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_16_thin_bedded_limestone.png"
+  },
+  {
+    "number": 17,
+    "label": "Limestone containing nodules of chert or flint",
+    "bbox": [
+      266,
+      864,
+      533,
+      1003
+    ],
+    "svg": "rock_legend_vectors/svg/legend_17_limestone_containing_nodules_of_chert_or_flint.svg",
+    "png": "rock_legend_vectors/png_crops/legend_17_limestone_containing_nodules_of_chert_or_flint.png"
+  },
+  {
+    "number": 18,
+    "label": "Bedded chert",
+    "bbox": [
+      638,
+      862,
+      904,
+      1000
+    ],
+    "svg": "rock_legend_vectors/svg/legend_18_bedded_chert.svg",
+    "png": "rock_legend_vectors/png_crops/legend_18_bedded_chert.png"
+  },
+  {
+    "number": 19,
+    "label": "Dolomite",
+    "bbox": [
+      1007,
+      862,
+      1278,
+      1002
+    ],
+    "svg": "rock_legend_vectors/svg/legend_19_dolomite.svg",
+    "png": "rock_legend_vectors/png_crops/legend_19_dolomite.png"
+  },
+  {
+    "number": 20,
+    "label": "Marble",
+    "bbox": [
+      1381,
+      868,
+      1635,
+      1008
+    ],
+    "svg": "rock_legend_vectors/svg/legend_20_marble.svg",
+    "png": "rock_legend_vectors/png_crops/legend_20_marble.png"
+  },
+  {
+    "number": 21,
+    "label": "Crystalline limestone",
+    "bbox": [
+      1739,
+      867,
+      2005,
+      1004
+    ],
+    "svg": "rock_legend_vectors/svg/legend_21_crystalline_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_21_crystalline_limestone.png"
+  },
+  {
+    "number": 22,
+    "label": "Chalk",
+    "bbox": [
+      2108,
+      870,
+      2375,
+      1006
+    ],
+    "svg": "rock_legend_vectors/svg/legend_22_chalk.svg",
+    "png": "rock_legend_vectors/png_crops/legend_22_chalk.png"
+  },
+  {
+    "number": 23,
+    "label": "Clayey or argillaceous limestone",
+    "bbox": [
+      2479,
+      865,
+      2747,
+      1006
+    ],
+    "svg": "rock_legend_vectors/svg/legend_23_clayey_or_argillaceous_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_23_clayey_or_argillaceous_limestone.png"
+  },
+  {
+    "number": 24,
+    "label": "Calcareous shale or shaly limestone",
+    "bbox": [
+      2843,
+      867,
+      3109,
+      1005
+    ],
+    "svg": "rock_legend_vectors/svg/legend_24_calcareous_shale_or_shaly_limestone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_24_calcareous_shale_or_shaly_limestone.png"
+  },
+  {
+    "number": 25,
+    "label": "Shale",
+    "bbox": [
+      3214,
+      867,
+      3479,
+      1004
+    ],
+    "svg": "rock_legend_vectors/svg/legend_25_shale.svg",
+    "png": "rock_legend_vectors/png_crops/legend_25_shale.png"
+  },
+  {
+    "number": 26,
+    "label": "Sandy shale",
+    "bbox": [
+      3588,
+      865,
+      3855,
+      1002
+    ],
+    "svg": "rock_legend_vectors/svg/legend_26_sandy_shale.svg",
+    "png": "rock_legend_vectors/png_crops/legend_26_sandy_shale.png"
+  },
+  {
+    "number": 27,
+    "label": "Slate",
+    "bbox": [
+      267,
+      1072,
+      532,
+      1211
+    ],
+    "svg": "rock_legend_vectors/svg/legend_27_slate.svg",
+    "png": "rock_legend_vectors/png_crops/legend_27_slate.png"
+  },
+  {
+    "number": 28,
+    "label": "Clay",
+    "bbox": [
+      639,
+      1070,
+      903,
+      1210
+    ],
+    "svg": "rock_legend_vectors/svg/legend_28_clay.svg",
+    "png": "rock_legend_vectors/png_crops/legend_28_clay.png"
+  },
+  {
+    "number": 29,
+    "label": "Sandy clay",
+    "bbox": [
+      1011,
+      1070,
+      1278,
+      1210
+    ],
+    "svg": "rock_legend_vectors/svg/legend_29_sandy_clay.svg",
+    "png": "rock_legend_vectors/png_crops/legend_29_sandy_clay.png"
+  },
+  {
+    "number": 30,
+    "label": "Fire clay or flint clay",
+    "bbox": [
+      1382,
+      1075,
+      1635,
+      1215
+    ],
+    "svg": "rock_legend_vectors/svg/legend_30_fire_clay_or_flint_clay.svg",
+    "png": "rock_legend_vectors/png_crops/legend_30_fire_clay_or_flint_clay.png"
+  },
+  {
+    "number": 31,
+    "label": "Coal",
+    "bbox": [
+      1738,
+      1074,
+      2005,
+      1211
+    ],
+    "svg": "rock_legend_vectors/svg/legend_31_coal.svg",
+    "png": "rock_legend_vectors/png_crops/legend_31_coal.png"
+  },
+  {
+    "number": 32,
+    "label": "Bony coal or impure coal",
+    "bbox": [
+      2108,
+      1076,
+      2375,
+      1214
+    ],
+    "svg": "rock_legend_vectors/svg/legend_32_bony_coal_or_impure_coal.svg",
+    "png": "rock_legend_vectors/png_crops/legend_32_bony_coal_or_impure_coal.png"
+  },
+  {
+    "number": 33,
+    "label": "Bone",
+    "bbox": [
+      2479,
+      1074,
+      2747,
+      1214
+    ],
+    "svg": "rock_legend_vectors/svg/legend_33_bone.svg",
+    "png": "rock_legend_vectors/png_crops/legend_33_bone.png"
+  },
+  {
+    "number": 34,
+    "label": "Cannel coal",
+    "bbox": [
+      2844,
+      1075,
+      3109,
+      1213
+    ],
+    "svg": "rock_legend_vectors/svg/legend_34_cannel_coal.svg",
+    "png": "rock_legend_vectors/png_crops/legend_34_cannel_coal.png"
+  },
+  {
+    "number": 35,
+    "label": "Cannel shale",
+    "bbox": [
+      3215,
+      1076,
+      3480,
+      1213
+    ],
+    "svg": "rock_legend_vectors/svg/legend_35_cannel_shale.svg",
+    "png": "rock_legend_vectors/png_crops/legend_35_cannel_shale.png"
+  },
+  {
+    "number": 36,
+    "label": "Carbonaceous shale",
+    "bbox": [
+      3588,
+      1075,
+      3856,
+      1213
+    ],
+    "svg": "rock_legend_vectors/svg/legend_36_carbonaceous_shale.svg",
+    "png": "rock_legend_vectors/png_crops/legend_36_carbonaceous_shale.png"
+  },
+  {
+    "number": 37,
+    "label": "Gypsum",
+    "bbox": [
+      557,
+      1280,
+      822,
+      1416
+    ],
+    "svg": "rock_legend_vectors/svg/legend_37_gypsum.svg",
+    "png": "rock_legend_vectors/png_crops/legend_37_gypsum.png"
+  },
+  {
+    "number": 38,
+    "label": "Salt",
+    "bbox": [
+      1110,
+      1279,
+      1374,
+      1419
+    ],
+    "svg": "rock_legend_vectors/svg/legend_38_salt.svg",
+    "png": "rock_legend_vectors/png_crops/legend_38_salt.png"
+  },
+  {
+    "number": 39,
+    "label": "Phosphate rock",
+    "bbox": [
+      1649,
+      1282,
+      1913,
+      1417
+    ],
+    "svg": "rock_legend_vectors/svg/legend_39_phosphate_rock.svg",
+    "png": "rock_legend_vectors/png_crops/legend_39_phosphate_rock.png"
+  },
+  {
+    "number": 40,
+    "label": "Breccia",
+    "bbox": [
+      2197,
+      1285,
+      2464,
+      1420
+    ],
+    "svg": "rock_legend_vectors/svg/legend_40_breccia.svg",
+    "png": "rock_legend_vectors/png_crops/legend_40_breccia.png"
+  },
+  {
+    "number": 41,
+    "label": "Peat",
+    "bbox": [
+      2751,
+      1280,
+      3009,
+      1419
+    ],
+    "svg": "rock_legend_vectors/svg/legend_41_peat.svg",
+    "png": "rock_legend_vectors/png_crops/legend_41_peat.png"
+  },
+  {
+    "number": 42,
+    "label": "Oil shale",
+    "bbox": [
+      3296,
+      1285,
+      3564,
+      1420
+    ],
+    "svg": "rock_legend_vectors/svg/legend_42_oil_shale.svg",
+    "png": "rock_legend_vectors/png_crops/legend_42_oil_shale.png"
+  },
+  {
+    "number": 43,
+    "label": "Metamorphism",
+    "bbox": [
+      486,
+      1559,
+      751,
+      1696
+    ],
+    "svg": "rock_legend_vectors/svg/legend_43_metamorphism.svg",
+    "png": "rock_legend_vectors/png_crops/legend_43_metamorphism.png"
+  },
+  {
+    "number": 44,
+    "label": "Schistose or gneissoid granite",
+    "bbox": [
+      967,
+      1558,
+      1238,
+      1697
+    ],
+    "svg": "rock_legend_vectors/svg/legend_44_schistose_or_gneissoid_granite.svg",
+    "png": "rock_legend_vectors/png_crops/legend_44_schistose_or_gneissoid_granite.png"
+  },
+  {
+    "number": 45,
+    "label": "Gneiss",
+    "bbox": [
+      1447,
+      1561,
+      1706,
+      1701
+    ],
+    "svg": "rock_legend_vectors/svg/legend_45_gneiss.svg",
+    "png": "rock_legend_vectors/png_crops/legend_45_gneiss.png"
+  },
+  {
+    "number": 46,
+    "label": "Contorted gneiss",
+    "bbox": [
+      1921,
+      1560,
+      2187,
+      1699
+    ],
+    "svg": "rock_legend_vectors/svg/legend_46_contorted_gneiss.svg",
+    "png": "rock_legend_vectors/png_crops/legend_46_contorted_gneiss.png"
+  },
+  {
+    "number": 47,
+    "label": "Gneiss and schist",
+    "bbox": [
+      2402,
+      1562,
+      2670,
+      1698
+    ],
+    "svg": "rock_legend_vectors/svg/legend_47_gneiss_and_schist.svg",
+    "png": "rock_legend_vectors/png_crops/legend_47_gneiss_and_schist.png"
+  },
+  {
+    "number": 48,
+    "label": "Schist",
+    "bbox": [
+      2879,
+      1562,
+      3144,
+      1699
+    ],
+    "svg": "rock_legend_vectors/svg/legend_48_schist.svg",
+    "png": "rock_legend_vectors/png_crops/legend_48_schist.png"
+  },
+  {
+    "number": 49,
+    "label": "Contorted schist",
+    "bbox": [
+      3362,
+      1563,
+      3630,
+      1700
+    ],
+    "svg": "rock_legend_vectors/svg/legend_49_contorted_schist.svg",
+    "png": "rock_legend_vectors/png_crops/legend_49_contorted_schist.png"
+  },
+  {
+    "number": 50,
+    "label": "Volcanic breccia and tuff",
+    "bbox": [
+      267,
+      1840,
+      532,
+      1978
+    ],
+    "svg": "rock_legend_vectors/svg/legend_50_volcanic_breccia_and_tuff.svg",
+    "png": "rock_legend_vectors/png_crops/legend_50_volcanic_breccia_and_tuff.png"
+  },
+  {
+    "number": 51,
+    "label": "Volcanic breccia or agglomerate",
+    "bbox": [
+      638,
+      1840,
+      904,
+      1979
+    ],
+    "svg": "rock_legend_vectors/svg/legend_51_volcanic_breccia_or_agglomerate.svg",
+    "png": "rock_legend_vectors/png_crops/legend_51_volcanic_breccia_or_agglomerate.png"
+  },
+  {
+    "number": 52,
+    "label": "Basaltic flows",
+    "bbox": [
+      1010,
+      1840,
+      1278,
+      1977
+    ],
+    "svg": "rock_legend_vectors/svg/legend_52_basaltic_flows.svg",
+    "png": "rock_legend_vectors/png_crops/legend_52_basaltic_flows.png"
+  },
+  {
+    "number": 53,
+    "label": "Bedded lava andesitic",
+    "bbox": [
+      1382,
+      1842,
+      1635,
+      1979
+    ],
+    "svg": "rock_legend_vectors/svg/legend_53_bedded_lava_andesitic.svg",
+    "png": "rock_legend_vectors/png_crops/legend_53_bedded_lava_andesitic.png"
+  },
+  {
+    "number": 54,
+    "label": "Bedded lava and tuff",
+    "bbox": [
+      1739,
+      1840,
+      2004,
+      1977
+    ],
+    "svg": "rock_legend_vectors/svg/legend_54_bedded_lava_and_tuff.svg",
+    "png": "rock_legend_vectors/png_crops/legend_54_bedded_lava_and_tuff.png"
+  },
+  {
+    "number": 55,
+    "label": "Granite",
+    "bbox": [
+      2108,
+      1841,
+      2374,
+      1978
+    ],
+    "svg": "rock_legend_vectors/svg/legend_55_granite.svg",
+    "png": "rock_legend_vectors/png_crops/legend_55_granite.png"
+  },
+  {
+    "number": 56,
+    "label": "Soapstone talc and serpentine",
+    "bbox": [
+      2480,
+      1842,
+      2748,
+      1978
+    ],
+    "svg": "rock_legend_vectors/svg/legend_56_soapstone_talc_and_serpentine.svg",
+    "png": "rock_legend_vectors/png_crops/legend_56_soapstone_talc_and_serpentine.png"
+  },
+  {
+    "number": 57,
+    "label": "Massive igneous rock 57",
+    "bbox": [
+      2845,
+      1842,
+      3110,
+      1980
+    ],
+    "svg": "rock_legend_vectors/svg/legend_57_massive_igneous_rock_57.svg",
+    "png": "rock_legend_vectors/png_crops/legend_57_massive_igneous_rock_57.png"
+  },
+  {
+    "number": 58,
+    "label": "Massive igneous rock 58",
+    "bbox": [
+      3215,
+      1844,
+      3481,
+      1980
+    ],
+    "svg": "rock_legend_vectors/svg/legend_58_massive_igneous_rock_58.svg",
+    "png": "rock_legend_vectors/png_crops/legend_58_massive_igneous_rock_58.png"
+  },
+  {
+    "number": 59,
+    "label": "Massive igneous rock 59",
+    "bbox": [
+      3588,
+      1844,
+      3855,
+      1980
+    ],
+    "svg": "rock_legend_vectors/svg/legend_59_massive_igneous_rock_59.svg",
+    "png": "rock_legend_vectors/png_crops/legend_59_massive_igneous_rock_59.png"
+  },
+  {
+    "number": 60,
+    "label": "Massive igneous rock 60",
+    "bbox": [
+      268,
+      2049,
+      532,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_60_massive_igneous_rock_60.svg",
+    "png": "rock_legend_vectors/png_crops/legend_60_massive_igneous_rock_60.png"
+  },
+  {
+    "number": 61,
+    "label": "Massive igneous rock 61",
+    "bbox": [
+      638,
+      2049,
+      904,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_61_massive_igneous_rock_61.svg",
+    "png": "rock_legend_vectors/png_crops/legend_61_massive_igneous_rock_61.png"
+  },
+  {
+    "number": 62,
+    "label": "Porphyritic rock 62",
+    "bbox": [
+      1010,
+      2050,
+      1277,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_62_porphyritic_rock_62.svg",
+    "png": "rock_legend_vectors/png_crops/legend_62_porphyritic_rock_62.png"
+  },
+  {
+    "number": 63,
+    "label": "Porphyritic rock 63",
+    "bbox": [
+      1382,
+      2051,
+      1634,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_63_porphyritic_rock_63.svg",
+    "png": "rock_legend_vectors/png_crops/legend_63_porphyritic_rock_63.png"
+  },
+  {
+    "number": 64,
+    "label": "Porphyritic rock 64",
+    "bbox": [
+      1739,
+      2048,
+      2004,
+      2186
+    ],
+    "svg": "rock_legend_vectors/svg/legend_64_porphyritic_rock_64.svg",
+    "png": "rock_legend_vectors/png_crops/legend_64_porphyritic_rock_64.png"
+  },
+  {
+    "number": 65,
+    "label": "Massive igneous rock 65",
+    "bbox": [
+      2108,
+      2048,
+      2374,
+      2186
+    ],
+    "svg": "rock_legend_vectors/svg/legend_65_massive_igneous_rock_65.svg",
+    "png": "rock_legend_vectors/png_crops/legend_65_massive_igneous_rock_65.png"
+  },
+  {
+    "number": 66,
+    "label": "Massive igneous rock 66",
+    "bbox": [
+      2479,
+      2050,
+      2747,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_66_massive_igneous_rock_66.svg",
+    "png": "rock_legend_vectors/png_crops/legend_66_massive_igneous_rock_66.png"
+  },
+  {
+    "number": 67,
+    "label": "Massive igneous rock 67",
+    "bbox": [
+      2847,
+      2050,
+      3109,
+      2187
+    ],
+    "svg": "rock_legend_vectors/svg/legend_67_massive_igneous_rock_67.svg",
+    "png": "rock_legend_vectors/png_crops/legend_67_massive_igneous_rock_67.png"
+  },
+  {
+    "number": 68,
+    "label": "Massive igneous rock 68",
+    "bbox": [
+      3214,
+      2050,
+      3480,
+      2188
+    ],
+    "svg": "rock_legend_vectors/svg/legend_68_massive_igneous_rock_68.svg",
+    "png": "rock_legend_vectors/png_crops/legend_68_massive_igneous_rock_68.png"
+  },
+  {
+    "number": 69,
+    "label": "Brecciated rock",
+    "bbox": [
+      3589,
+      2049,
+      3855,
+      2188
+    ],
+    "svg": "rock_legend_vectors/svg/legend_69_brecciated_rock.svg",
+    "png": "rock_legend_vectors/png_crops/legend_69_brecciated_rock.png"
+  },
+  {
+    "number": 70,
+    "label": "Quartz",
+    "bbox": [
+      556,
+      2258,
+      821,
+      2394
+    ],
+    "svg": "rock_legend_vectors/svg/legend_70_quartz.svg",
+    "png": "rock_legend_vectors/png_crops/legend_70_quartz.png"
+  },
+  {
+    "number": 71,
+    "label": "Ore solid black in thin areas",
+    "bbox": [
+      1108,
+      2259,
+      1374,
+      2394
+    ],
+    "svg": "rock_legend_vectors/svg/legend_71_ore_solid_black_in_thin_areas.svg",
+    "png": "rock_legend_vectors/png_crops/legend_71_ore_solid_black_in_thin_areas.png"
+  },
+  {
+    "number": 72,
+    "label": "Ore",
+    "bbox": [
+      1649,
+      2256,
+      1912,
+      2393
+    ],
+    "svg": "rock_legend_vectors/svg/legend_72_ore.svg",
+    "png": "rock_legend_vectors/png_crops/legend_72_ore.png"
+  },
+  {
+    "number": 73,
+    "label": "Lean ore",
+    "bbox": [
+      2196,
+      2257,
+      2463,
+      2393
+    ],
+    "svg": "rock_legend_vectors/svg/legend_73_lean_ore.svg",
+    "png": "rock_legend_vectors/png_crops/legend_73_lean_ore.png"
+  },
+  {
+    "number": 74,
+    "label": "Bedrock kind not indicated",
+    "bbox": [
+      2750,
+      2258,
+      3009,
+      2394
+    ],
+    "svg": "rock_legend_vectors/svg/legend_74_bedrock_kind_not_indicated.svg",
+    "png": "rock_legend_vectors/png_crops/legend_74_bedrock_kind_not_indicated.png"
+  },
+  {
+    "number": 75,
+    "label": "Blank",
+    "bbox": [
+      3298,
+      2259,
+      3564,
+      2395
+    ],
+    "svg": "rock_legend_vectors/svg/legend_75_blank.svg",
+    "png": "rock_legend_vectors/png_crops/legend_75_blank.png"
+  }
+]

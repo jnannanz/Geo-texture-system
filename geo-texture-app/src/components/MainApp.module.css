@@ -1,0 +1,25 @@
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-color);
+}
+
+.contentArea {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.mainViewer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: #000; /* Darker backdrop for map/canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

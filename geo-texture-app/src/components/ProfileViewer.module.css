@@ -1,0 +1,83 @@
+.viewerContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-color);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.uploadState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg-panel);
+  border: 1px dashed var(--text-secondary);
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+}
+
+.uploadIcon {
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.uploadState h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.uploadState p {
+  color: var(--text-secondary);
+  margin: 0 0 16px 0;
+  font-size: 14px;
+}
+
+.uploadBtn {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadBtn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.svgWrapper {
+  width: 90%;
+  height: 90%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svgWrapper svg {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: crosshair;
+}
+
+.svgWrapper path, .svgWrapper polygon {
+  transition: opacity 0.2s;
+}
+
+.svgWrapper path:hover, .svgWrapper polygon:hover {
+  opacity: 0.8;
+  stroke: var(--accent);
+  stroke-width: 2px;
+}
