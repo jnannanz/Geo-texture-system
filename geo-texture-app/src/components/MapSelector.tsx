@@ -27,6 +27,29 @@ const fallbackAgeColors = {
 const selectionSourceId = "terrain-block-selection-source";
 const selectionFillLayerId = "terrain-block-selection-fill";
 const selectionOutlineLayerId = "terrain-block-selection-outline";
+const maxSatelliteTextureSize = 768;
+const minSatelliteTextureSize = 320;
+const defaultSurfaceTextureStyle = "bag326/cluwjr06f002o01pphuck9mrm";
+const chinaStartCenters: Array<[number, number]> = [
+  [116.4074, 39.9042],
+  [121.4737, 31.2304],
+  [113.2644, 23.1291],
+  [104.0665, 30.5728],
+  [108.9398, 34.3416],
+  [114.3055, 30.5928],
+  [120.1551, 30.2741],
+  [118.7969, 32.0603],
+  [106.5516, 29.563],
+  [102.8329, 24.8801],
+  [87.6168, 43.8256],
+  [91.1322, 29.6604],
+  [126.6424, 45.7567],
+  [111.751, 40.8415],
+  [117.1201, 36.6512],
+  [112.9388, 28.2282],
+  [119.2965, 26.0745],
+  [101.7782, 36.6171],
+];
 
 const defaultTerrainLayers: TerrainLayer[] = [
   { name: "第四纪覆盖层", color: "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
@@ -34,6 +57,81 @@ const defaultTerrainLayers: TerrainLayer[] = [
   { name: "灰岩层", color: "#8ca7a0", textureFile: "legend_15_massively_bedded_limestone.png" },
   { name: "结晶基底", color: "#6f5f7f", textureFile: "legend_45_gneiss.png" },
 ];
+
+const geologicAgeNames: Record<string, string> = {
+  "holocene": "全新世",
+  "pleistocene": "更新世",
+  "pliocene": "上新世",
+  "miocene": "中新世",
+  "oligocene": "渐新世",
+  "eocene": "始新世",
+  "paleocene": "古新世",
+  "quaternary": "第四纪",
+  "neogene": "新近纪",
+  "paleogene": "古近纪",
+  "tertiary": "第三纪",
+  "cretaceous": "白垩纪",
+  "jurassic": "侏罗纪",
+  "triassic": "三叠纪",
+  "permian": "二叠纪",
+  "carboniferous": "石炭纪",
+  "pennsylvanian": "宾夕法尼亚亚纪",
+  "mississippian": "密西西比亚纪",
+  "devonian": "泥盆纪",
+  "silurian": "志留纪",
+  "ordovician": "奥陶纪",
+  "cambrian": "寒武纪",
+  "proterozoic": "元古宙",
+  "archean": "太古宙",
+  "hadean": "冥古宙",
+  "precambrian": "前寒武纪",
+  "cenozoic": "新生代",
+  "mesozoic": "中生代",
+  "paleozoic": "古生代",
+};
+
+const geologicAgeModifiers: Record<string, string> = {
+  "early": "早",
+  "middle": "中",
+  "late": "晚",
+  "lower": "下",
+  "upper": "上",
+};
+
+function asStageName(name: string, modifier: string) {
+  if (modifier === "lower" || modifier === "middle" || modifier === "upper") {
+    if (name.endsWith("纪")) return `${name.slice(0, -1)}统`;
+    if (name.endsWith("世")) return `${name.slice(0, -1)}统`;
+  }
+
+  if (name.endsWith("纪")) return `${name.slice(0, -1)}世`;
+  return name;
+}
+
+function localizeGeologicPart(part: string) {
+  const trimmed = part.trim();
+  const lower = trimmed.toLowerCase();
+  if (geologicAgeNames[lower]) return geologicAgeNames[lower];
+
+  const modifierMatch = lower.match(/^(early|middle|late|lower|upper)\s+(.+)$/);
+  if (modifierMatch) {
+    const [, modifier, baseName] = modifierMatch;
+    const localizedBase = geologicAgeNames[baseName];
+    if (localizedBase) return `${geologicAgeModifiers[modifier]}${asStageName(localizedBase, modifier)}`;
+  }
+
+  return trimmed;
+}
+
+function localizeGeologicName(name?: string) {
+  if (!name) return "地表单元";
+
+  return name
+    .split(/\s*[/,;]\s*|\s+-\s+/)
+    .map(localizeGeologicPart)
+    .filter(Boolean)
+    .join(" / ");
+}
 
 const createSelectionFeature = (start: mapboxgl.LngLat, end: mapboxgl.LngLat): Feature<Polygon> => {
   const west = Math.min(start.lng, end.lng);
@@ -57,6 +155,55 @@ const createSelectionFeature = (start: mapboxgl.LngLat, end: mapboxgl.LngLat): F
   };
 };
 
+function mercatorY(lat: number) {
+  const clampedLat = Math.min(Math.max(lat, -85.05112878), 85.05112878);
+  return Math.log(Math.tan(Math.PI / 4 + (clampedLat * Math.PI) / 360));
+}
+
+function getSatelliteTextureSize(bounds: TerrainBlockData["bounds"]) {
+  const xSpan = Math.max(Math.abs(((bounds.east - bounds.west) * Math.PI) / 180), 0.000001);
+  const ySpan = Math.max(Math.abs(mercatorY(bounds.north) - mercatorY(bounds.south)), 0.000001);
+  const aspect = xSpan / ySpan;
+
+  if (aspect >= 1) {
+    return {
+      width: maxSatelliteTextureSize,
+      height: Math.round(Math.min(Math.max(maxSatelliteTextureSize / aspect, minSatelliteTextureSize), maxSatelliteTextureSize)),
+    };
+  }
+
+  return {
+    width: Math.round(Math.min(Math.max(maxSatelliteTextureSize * aspect, minSatelliteTextureSize), maxSatelliteTextureSize)),
+    height: maxSatelliteTextureSize,
+  };
+}
+
+function buildMapboxSatelliteTextureUrl(bounds: TerrainBlockData["bounds"], token?: string, stylePath = defaultSurfaceTextureStyle) {
+  if (!token) return undefined;
+
+  const { width, height } = getSatelliteTextureSize(bounds);
+  const bbox = `[${bounds.west},${bounds.south},${bounds.east},${bounds.north}]`;
+  const normalizedStylePath = stylePath.replace(/^mapbox:\/\/styles\//, "").replace(/^\/+|\/+$/g, "");
+  const params = new URLSearchParams({
+    access_token: token,
+    attribution: "false",
+    logo: "false",
+  });
+
+  return `https://api.mapbox.com/styles/v1/${normalizedStylePath}/static/${bbox}/${width}x${height}@2x?${params.toString()}`;
+}
+
+function getRandomChinaStartView() {
+  const [lng, lat] = chinaStartCenters[Math.floor(Math.random() * chinaStartCenters.length)];
+  const lngJitter = (Math.random() - 0.5) * 0.7;
+  const latJitter = (Math.random() - 0.5) * 0.5;
+
+  return {
+    center: [lng + lngJitter, lat + latJitter] as [number, number],
+    zoom: 8.8 + Math.random() * 2.2,
+  };
+}
+
 export default function MapSelector() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isSelectingBlock, setIsSelectingBlock] = useState(false);
@@ -76,12 +223,13 @@ export default function MapSelector() {
     if (!token || !mapContainer.current || map.current) return;
 
     mapboxgl.accessToken = token;
+    const startView = getRandomChinaStartView();
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v12",
-      center: [120.1551, 30.2741], // Default center (Hangzhou, China)
-      zoom: 11
+      center: startView.center,
+      zoom: startView.zoom,
     });
 
     map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
@@ -269,7 +417,7 @@ export default function MapSelector() {
         ];
       }
       return [
-        { name: unit.best_int_name || "地表单元", color: unit.color || "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
+        { name: localizeGeologicName(unit.best_int_name), color: unit.color || "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
         ...defaultTerrainLayers.slice(1),
       ];
     } catch {
@@ -288,6 +436,7 @@ export default function MapSelector() {
     const east = Math.max(start.lng, end.lng);
     const south = Math.min(start.lat, end.lat);
     const north = Math.max(start.lat, end.lat);
+    const bounds = { west, south, east, north };
     const rows = 34;
     const cols = 34;
     const elevations: number[][] = [];
@@ -323,13 +472,21 @@ export default function MapSelector() {
     const midLat = (south + north) / 2;
     const midLng = (west + east) / 2;
     const layers = await inferTerrainLayers(midLat, midLng);
+    const surfaceTextureUrl = buildMapboxSatelliteTextureUrl(
+      bounds,
+      process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
+      process.env.NEXT_PUBLIC_MAPBOX_SURFACE_STYLE,
+    );
 
     setTerrainBlock({
       elevations,
-      bounds: { west, south, east, north },
+      bounds,
       minElevation,
       maxElevation,
       layers,
+      surfaceTextureUrl,
+      surfaceTextureLabel: surfaceTextureUrl ? "地表卫星贴图" : undefined,
+      surfaceAttribution: surfaceTextureUrl ? "© Mapbox © OpenStreetMap © Maxar" : undefined,
     });
     setIsRenderingBlock(false);
   }, [inferTerrainLayers]);
@@ -517,19 +674,11 @@ export default function MapSelector() {
          .style("opacity", 0.7);
     };
 
-    const macrostratToLocal: Record<string, string> = {
-      "Quaternary": "第四纪", "Neogene": "新近纪", "Paleogene": "古近纪", "Cretaceous": "白垩纪", 
-      "Jurassic": "侏罗纪", "Triassic": "三叠纪", "Permian": "二叠纪", "Pennsylvanian": "宾夕法尼亚纪", 
-      "Mississippian": "密西西比纪", "Devonian": "泥盆纪", "Silurian": "志留纪", "Ordovician": "奥陶纪", 
-      "Cambrian": "寒武纪", "Precambrian": "前寒武纪", "Proterozoic": "元古代", "Archean": "太古代"
-    };
-
     const getLayerInfo = (index: number) => {
       // Top layer from real API data
       if (geologicUnits && geologicUnits.length > 0 && index === 0) {
         const unit = geologicUnits[0];
-        const bestInterval = unit.best_int_name;
-        const ageName = bestInterval ? macrostratToLocal[bestInterval] || bestInterval : "未知地层";
+        const ageName = localizeGeologicName(unit.best_int_name);
         const lith = (unit.lith || "").toLowerCase();
         let lithName = "岩层";
         let pattern = "pattern-1";

@@ -8,7 +8,7 @@ GeoTexture System 是一个面向地质图件和剖面图制作的 Web 工具。
 - 岩性纹理库：内置 75 个岩性图例纹理，支持按沉积岩、变质岩、火成岩等类别浏览。
 - 地质年代色卡：维护常用地质年代颜色数据，供剖面着色使用。
 - 地图剖面推演：在 Mapbox 地图上绘制 A-B 剖面线，读取地形并尝试结合 Macrostrat 数据生成示意地质剖面。
-- 3D 地形块渲染：在 Mapbox 地图上拖拽矩形范围，采样 DEM 并用 Three.js 实时渲染地表和推断式地下岩层。
+- 3D 地形块渲染：在 Mapbox 地图上拖拽矩形范围，采样 DEM、贴合卫星地表影像，并用 Three.js 实时渲染推断式地下岩层。
 
 ## 项目结构
 
@@ -57,7 +57,7 @@ python tools/build_pattern_defs.py
 - 岩性纹理资源以 `rock_legend_vectors/manifest.json` 为索引，更新素材后再运行生成脚本。
 - `geo-texture-app/src/components/PatternDefs.tsx` 是生成文件，体积较大，修改纹理时优先改源 SVG 或生成脚本。
 - 本地上传 SVG 当前直接注入页面，适合个人本地使用；如果部署给外部用户，应先加入 SVG 清洗和文件安全校验。
-- 3D 地块中的 DEM 来自 Mapbox 当前可查询地形；地下岩层为基于 Macrostrat 地表单元的示意推断，不等同于钻孔或地震解释成果。
+- 3D 地块中的 DEM 和卫星地表影像来自 Mapbox 当前可查询数据；地下岩层为基于 Macrostrat 地表单元的示意推断，不等同于钻孔或地震解释成果。
 - `.env.local`、`.DS_Store`、压缩包和本地工具目录不应提交到 GitHub。
 
 ## GitHub Desktop 后续管理
