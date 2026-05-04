@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import styles from "./MapSelector.module.css";
 import { PenTool, Map as MapIcon, RefreshCw, Download, Square } from "lucide-react";
 import mapboxgl from "mapbox-gl";
@@ -224,7 +224,7 @@ export default function MapSelector() {
 
     mapboxgl.accessToken = token;
     const startView = getRandomChinaStartView();
-    
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v12",
@@ -276,7 +276,7 @@ export default function MapSelector() {
         }
       ]
     });
-    
+
     map.current.addControl(draw.current);
 
     map.current.on('load', () => {
@@ -299,7 +299,7 @@ export default function MapSelector() {
 
   useEffect(() => {
     if (!draw.current || !map.current) return;
-    
+
     if (isDrawing) {
       draw.current.deleteAll(); // Clear previous line
       draw.current.changeMode("draw_line_string");
@@ -543,17 +543,17 @@ export default function MapSelector() {
     setIsDrawing(false);
     setTerrainBlock(null);
     setIsEstimating(true);
-    
+
     const elevationData: number[] = [];
     let geologicUnits: MacrostratUnit[] = [];
-    
+
     if (draw.current && map.current) {
       const features = draw.current.getAll().features;
       if (features.length > 0 && features[0].geometry.type === 'LineString') {
         const coords = features[0].geometry.coordinates;
         const start = coords[0];
         const end = coords[coords.length - 1];
-        
+
         const numPoints = 60;
         for (let i = 0; i <= numPoints; i++) {
           const t = i / numPoints;
@@ -562,21 +562,21 @@ export default function MapSelector() {
           const elevation = map.current.queryTerrainElevation([lng, lat]) || 0;
           elevationData.push(elevation);
         }
-        
+
         try {
           const midLng = (start[0] + end[0]) / 2;
           const midLat = (start[1] + end[1]) / 2;
           const response = await fetch(`https://macrostrat.org/api/v2/geologic_units/map?lat=${midLat}&lng=${midLng}`);
           const data = await response.json();
           if (data && data.success && data.success.data) {
-             geologicUnits = data.success.data;
+            geologicUnits = data.success.data;
           }
         } catch (e) {
           console.error("Failed to fetch macrostrat data", e);
         }
       }
     }
-    
+
     setTimeout(() => {
       setIsEstimating(false);
       setHasProfile(true);
@@ -586,15 +586,15 @@ export default function MapSelector() {
 
   const renderD3Profile = (elevations: number[] = [], geologicUnits: MacrostratUnit[] = []) => {
     if (!d3Container.current) return;
-    
+
     const svg = d3.select(d3Container.current);
     svg.selectAll("*").remove();
 
     const width = 800;
     const height = 350;
-    
+
     svg.attr("viewBox", `0 0 ${width} ${height}`);
-    
+
     // Create a beautiful border/background
     svg.append("rect")
       .attr("width", width)
@@ -604,74 +604,74 @@ export default function MapSelector() {
       .attr("stroke-width", 2);
 
     // Dynamic Geological structural data points
-    let topoPoints: {x: number, y: number}[] = [];
-    
+    let topoPoints: { x: number, y: number }[] = [];
+
     if (elevations && elevations.length > 0) {
       const validElevs = elevations.filter(e => e > 0);
       const minElev = validElevs.length > 0 ? Math.min(...validElevs) : 0;
       const maxElev = validElevs.length > 0 ? Math.max(...validElevs) : 100;
       const elevRange = Math.max(maxElev - minElev, 1);
-      
+
       topoPoints = elevations.map((elev, i) => {
         const x = (i / (elevations.length - 1)) * width;
         // Project elevation to Y coordinates (SVG y goes down, so max elev is smaller y)
         // Ensure minimum elevation maps to y=140, maximum to y=40
-        const y = elev > 0 ? 140 - ((elev - minElev) / elevRange) * 100 : 100; 
-        return {x, y};
+        const y = elev > 0 ? 140 - ((elev - minElev) / elevRange) * 100 : 100;
+        return { x, y };
       });
     } else {
       const pts = [0, 100, 250, 400, 550, 700, 800];
       const topo = [70, 50, 110, 80, 130, 70, 80];
-      topoPoints = pts.map((x, i) => ({x, y: topo[i]}));
+      topoPoints = pts.map((x, i) => ({ x, y: topo[i] }));
     }
 
     // Generate layers that follow topography with tectonic folding
     const layer1Data = topoPoints.map(p => {
       const foldOffset = Math.sin(p.x / 100) * 20;
-      return {x: p.x, y0: p.y + 70 + foldOffset, y1: p.y};
+      return { x: p.x, y0: p.y + 70 + foldOffset, y1: p.y };
     });
-    
+
     const layer2Data = topoPoints.map(p => {
       const foldOffset = Math.sin(p.x / 100) * 20;
       const foldOffset2 = Math.sin(p.x / 130 + 1) * 35;
-      return {x: p.x, y0: p.y + 150 + foldOffset2, y1: p.y + 70 + foldOffset};
+      return { x: p.x, y0: p.y + 150 + foldOffset2, y1: p.y + 70 + foldOffset };
     });
-    
+
     const layer3Data = topoPoints.map(p => {
       const foldOffset2 = Math.sin(p.x / 130 + 1) * 35;
       const foldOffset3 = Math.sin(p.x / 160 + 2) * 50;
-      return {x: p.x, y0: p.y + 240 + foldOffset3, y1: p.y + 150 + foldOffset2};
-    });
-    
-    const layer4Data = topoPoints.map(p => {
-      const foldOffset3 = Math.sin(p.x / 160 + 2) * 50;
-      return {x: p.x, y0: height + 50, y1: p.y + 240 + foldOffset3};
+      return { x: p.x, y0: p.y + 240 + foldOffset3, y1: p.y + 150 + foldOffset2 };
     });
 
-    const areaGen = d3.area<{x: number, y0: number, y1: number}>()
+    const layer4Data = topoPoints.map(p => {
+      const foldOffset3 = Math.sin(p.x / 160 + 2) * 50;
+      return { x: p.x, y0: height + 50, y1: p.y + 240 + foldOffset3 };
+    });
+
+    const areaGen = d3.area<{ x: number, y0: number, y1: number }>()
       .x(d => d.x)
       .y0(d => d.y0)
       .y1(d => d.y1)
       .curve(d3.curveCatmullRom.alpha(0.5));
 
-    const drawLayer = (data: {x: number, y0: number, y1: number}[], color: string, pattern: string) => {
+    const drawLayer = (data: { x: number, y0: number, y1: number }[], color: string, pattern: string) => {
       const g = svg.append("g");
-      
+
       // Color fill
       g.append("path")
-         .datum(data)
-         .attr("d", areaGen)
-         .attr("fill", color)
-         .attr("stroke", "#222")
-         .attr("stroke-width", 1.5);
-         
+        .datum(data)
+        .attr("d", areaGen)
+        .attr("fill", color)
+        .attr("stroke", "#222")
+        .attr("stroke-width", 1.5);
+
       // Pattern overlay
       g.append("path")
-         .datum(data)
-         .attr("d", areaGen)
-         .attr("fill", `url(#${pattern})`)
-         .style("mix-blend-mode", "multiply")
-         .style("opacity", 0.7);
+        .datum(data)
+        .attr("d", areaGen)
+        .attr("fill", `url(#${pattern})`)
+        .style("mix-blend-mode", "multiply")
+        .style("opacity", 0.7);
     };
 
     const getLayerInfo = (index: number) => {
@@ -682,31 +682,31 @@ export default function MapSelector() {
         const lith = (unit.lith || "").toLowerCase();
         let lithName = "岩层";
         let pattern = "pattern-1";
-        
+
         if (lith.includes("metamorphic") || lith.includes("gneiss") || lith.includes("schist")) {
-           lithName = "变质岩/片麻岩"; pattern = "pattern-73"; // Metamorphic
+          lithName = "变质岩/片麻岩"; pattern = "pattern-73"; // Metamorphic
         } else if (lith.includes("granite") || lith.includes("intrusive") || lith.includes("plutonic")) {
-           lithName = "侵入花岗岩"; pattern = "pattern-61";
+          lithName = "侵入花岗岩"; pattern = "pattern-61";
         } else if (lith.includes("limestone") || lith.includes("carbonate")) {
-           lithName = "灰岩"; pattern = "pattern-15";
+          lithName = "灰岩"; pattern = "pattern-15";
         } else if (lith.includes("sandstone")) {
-           lithName = "砂岩"; pattern = "pattern-8";
+          lithName = "砂岩"; pattern = "pattern-8";
         } else if (lith.includes("shale")) {
-           lithName = "页岩"; pattern = "pattern-25";
+          lithName = "页岩"; pattern = "pattern-25";
         } else if (lith.includes("volcanic") || lith.includes("basalt")) {
-           lithName = "火山岩"; pattern = "pattern-63";
+          lithName = "火山岩"; pattern = "pattern-63";
         }
-        
+
         return { name: `${ageName} (${lithName})`, color: unit.color || "#999966", pattern };
       }
-      
+
       // If we used the API for layer 0, generate logical older layers below it
       if (geologicUnits && geologicUnits.length > 0) {
-         if (index === 1) return { name: "太古代 (混合岩带)", color: "#FF8099", pattern: "pattern-71" };
-         if (index === 2) return { name: "前寒武纪 (结晶基底)", color: "#999966", pattern: "pattern-73" };
-         if (index === 3) return { name: "深部侵入岩体", color: "#FF6666", pattern: "pattern-61" };
+        if (index === 1) return { name: "太古代 (混合岩带)", color: "#FF8099", pattern: "pattern-71" };
+        if (index === 2) return { name: "前寒武纪 (结晶基底)", color: "#999966", pattern: "pattern-73" };
+        if (index === 3) return { name: "深部侵入岩体", color: "#FF6666", pattern: "pattern-61" };
       }
-      
+
       // Fallback mock data
       const defaults = [
         { name: "第四纪 (土壤、粉砂或冲积物)", color: fallbackAgeColors.quaternary, pattern: "pattern-1" },
@@ -733,7 +733,7 @@ export default function MapSelector() {
     const addLabel = (x: number, y: number, text: string) => {
       const g = svg.append("g").attr("transform", `translate(${x}, ${y})`);
       const estWidth = text.length * 13 * 0.8 + 16;
-      
+
       g.append("rect")
         .attr("x", -estWidth / 2)
         .attr("y", -14)
@@ -744,7 +744,7 @@ export default function MapSelector() {
         .attr("ry", 14)
         .attr("stroke", "rgba(0,0,0,0.15)")
         .attr("stroke-width", 1);
-        
+
       g.append("text")
         .text(text)
         .attr("fill", "#111")
@@ -768,7 +768,7 @@ export default function MapSelector() {
       <div className={styles.mapArea}>
         <div className={styles.mapOverlay}>
           <div className={styles.mapControls}>
-            <button 
+            <button
               className={`${styles.controlBtn} ${isDrawing ? styles.active : ""}`}
               onClick={() => {
                 setIsSelectingBlock(false);
@@ -793,7 +793,7 @@ export default function MapSelector() {
               </button>
             )}
           </div>
-          
+
           {!process.env.NEXT_PUBLIC_MAPBOX_TOKEN && (
             <div className={styles.mapPlaceholder}>
               <MapIcon size={48} className={styles.mapIcon} />
@@ -804,7 +804,7 @@ export default function MapSelector() {
             </div>
           )}
         </div>
-        
+
         {/* Actual Map Container */}
         <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />
       </div>
@@ -819,7 +819,7 @@ export default function MapSelector() {
             </button>
           )}
         </div>
-        
+
         <div className={styles.profileContent}>
           {(isEstimating || isRenderingBlock) && (
             <div className={styles.loader}>
@@ -841,9 +841,9 @@ export default function MapSelector() {
           {terrainBlock && !isRenderingBlock && (
             <TerrainBlock3D data={terrainBlock} />
           )}
-          
-          <svg 
-            ref={d3Container} 
+
+          <svg
+            ref={d3Container}
             className={styles.d3Svg}
             style={{ display: hasProfile && !isEstimating && !terrainBlock ? "block" : "none" }}
           />
