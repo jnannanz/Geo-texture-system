@@ -8,6 +8,7 @@ import styles from "./MapSelector.module.css";
 export interface TerrainLayer {
   name: string;
   color: string;
+  textureFile?: string;
 }
 
 export interface TerrainBlockData {
@@ -30,7 +31,6 @@ interface TerrainBlock3DProps {
 const terrainWidth = 16;
 const terrainDepth = 12;
 const layerDepth = 1.25;
-const textureSize = 128;
 
 function normalizedElevation(elevation: number, minElevation: number, maxElevation: number) {
   const range = Math.max(maxElevation - minElevation, 1);
@@ -48,86 +48,14 @@ function layerBoundaryY(data: TerrainBlockData, row: number, col: number, bounda
   return terrainY - boundaryIndex * layerDepth - fold;
 }
 
-function createLithologyTexture(layer: TerrainLayer, index: number) {
-  const canvas = document.createElement("canvas");
-  canvas.width = textureSize;
-  canvas.height = textureSize;
-  const context = canvas.getContext("2d");
-  if (!context) return null;
+function loadLithologyTexture(loader: THREE.TextureLoader, textureFile?: string) {
+  if (!textureFile) return null;
 
-  const name = layer.name.toLowerCase();
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, textureSize, textureSize);
-  context.strokeStyle = "rgba(16, 24, 39, 0.52)";
-  context.fillStyle = "rgba(16, 24, 39, 0.42)";
-  context.lineWidth = 3;
-
-  if (name.includes("砂") || name.includes("sand")) {
-    for (let y = -textureSize; y < textureSize * 2; y += 18) {
-      context.beginPath();
-      context.moveTo(-8, y);
-      context.lineTo(textureSize + 8, y + textureSize * 0.42);
-      context.stroke();
-    }
-    for (let i = 0; i < 90; i++) {
-      const x = (i * 37 + index * 19) % textureSize;
-      const y = (i * 53 + index * 23) % textureSize;
-      context.beginPath();
-      context.arc(x, y, 1.5, 0, Math.PI * 2);
-      context.fill();
-    }
-  } else if (name.includes("灰") || name.includes("limestone") || name.includes("carbonate")) {
-    for (let y = 12; y < textureSize; y += 24) {
-      context.beginPath();
-      context.moveTo(0, y);
-      context.lineTo(textureSize, y);
-      context.stroke();
-    }
-    for (let y = 0; y < textureSize; y += 24) {
-      const offset = (y / 24) % 2 === 0 ? 0 : 32;
-      for (let x = -offset; x < textureSize; x += 48) {
-        context.beginPath();
-        context.moveTo(x, y);
-        context.lineTo(x, y + 24);
-        context.stroke();
-      }
-    }
-  } else if (name.includes("页") || name.includes("shale")) {
-    context.lineWidth = 2;
-    for (let y = 8; y < textureSize; y += 11) {
-      context.beginPath();
-      context.moveTo(0, y + Math.sin(y) * 2);
-      context.lineTo(textureSize, y + Math.cos(y) * 2);
-      context.stroke();
-    }
-  } else if (name.includes("基底") || name.includes("晶") || name.includes("granite") || name.includes("basement")) {
-    context.lineWidth = 3;
-    for (let x = -textureSize; x < textureSize * 2; x += 20) {
-      context.beginPath();
-      context.moveTo(x, 0);
-      context.lineTo(x + textureSize, textureSize);
-      context.stroke();
-      context.beginPath();
-      context.moveTo(x + textureSize, 0);
-      context.lineTo(x, textureSize);
-      context.stroke();
-    }
-  } else {
-    for (let i = 0; i < 140; i++) {
-      const x = (i * 29 + index * 17) % textureSize;
-      const y = (i * 47 + index * 31) % textureSize;
-      context.beginPath();
-      context.arc(x, y, 2, 0, Math.PI * 2);
-      context.fill();
-    }
-  }
-
-  const texture = new THREE.CanvasTexture(canvas);
+  const texture = loader.load(`/api/lithology-texture/${textureFile}`);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(1, 1);
+  texture.repeat.set(3.5, 1.4);
   texture.colorSpace = THREE.SRGBColorSpace;
-  texture.needsUpdate = true;
   return texture;
 }
 
@@ -265,8 +193,12 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
     terrain.receiveShadow = true;
     scene.add(terrain);
 
+    const textureLoader = new THREE.TextureLoader();
+    const lithologyTextures: THREE.Texture[] = [];
+
     data.layers.forEach((layer, index) => {
-      const texture = createLithologyTexture(layer, index);
+      const texture = loadLithologyTexture(textureLoader, layer.textureFile);
+      if (texture) lithologyTextures.push(texture);
       const material = new THREE.MeshStandardMaterial({
         color: layer.color,
         map: texture,
@@ -327,6 +259,7 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
           }
         }
       });
+      lithologyTextures.forEach((texture) => texture.dispose());
       renderer.dispose();
       renderer.domElement.remove();
     };

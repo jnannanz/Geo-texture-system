@@ -29,10 +29,10 @@ const selectionFillLayerId = "terrain-block-selection-fill";
 const selectionOutlineLayerId = "terrain-block-selection-outline";
 
 const defaultTerrainLayers: TerrainLayer[] = [
-  { name: "第四纪覆盖层", color: "#d8c074" },
-  { name: "砂岩层", color: "#b87943" },
-  { name: "灰岩层", color: "#8ca7a0" },
-  { name: "结晶基底", color: "#6f5f7f" },
+  { name: "第四纪覆盖层", color: "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
+  { name: "砂岩层", color: "#b87943", textureFile: "legend_08_massive_sandstone.png" },
+  { name: "灰岩层", color: "#8ca7a0", textureFile: "legend_15_massively_bedded_limestone.png" },
+  { name: "结晶基底", color: "#6f5f7f", textureFile: "legend_45_gneiss.png" },
 ];
 
 const createSelectionFeature = (start: mapboxgl.LngLat, end: mapboxgl.LngLat): Feature<Polygon> => {
@@ -246,30 +246,30 @@ export default function MapSelector() {
       const lith = (unit.lith || "").toLowerCase();
       if (lith.includes("limestone") || lith.includes("carbonate")) {
         return [
-          { name: "碳酸盐盖层", color: unit.color || "#a9c2b8" },
-          { name: "厚层灰岩", color: "#8ca7a0" },
-          { name: "泥质夹层", color: "#7c6f62" },
-          { name: "结晶基底", color: "#6f5f7f" },
+          { name: "碳酸盐盖层", color: unit.color || "#a9c2b8", textureFile: "legend_23_clayey_or_argillaceous_limestone.png" },
+          { name: "厚层灰岩", color: "#8ca7a0", textureFile: "legend_15_massively_bedded_limestone.png" },
+          { name: "泥质夹层", color: "#7c6f62", textureFile: "legend_24_calcareous_shale_or_shaly_limestone.png" },
+          { name: "结晶基底", color: "#6f5f7f", textureFile: "legend_45_gneiss.png" },
         ];
       }
       if (lith.includes("granite") || lith.includes("intrusive") || lith.includes("plutonic")) {
         return [
-          { name: "风化壳", color: "#c7a76f" },
-          { name: "花岗质侵入体", color: unit.color || "#c77878" },
-          { name: "接触变质带", color: "#815f75" },
-          { name: "深部基底", color: "#51475f" },
+          { name: "风化壳", color: "#c7a76f", textureFile: "legend_01_soil_silt_or_alluvium.png" },
+          { name: "花岗质侵入体", color: unit.color || "#c77878", textureFile: "legend_55_granite.png" },
+          { name: "接触变质带", color: "#815f75", textureFile: "legend_43_metamorphism.png" },
+          { name: "深部基底", color: "#51475f", textureFile: "legend_45_gneiss.png" },
         ];
       }
       if (lith.includes("shale")) {
         return [
-          { name: "松散覆盖层", color: "#d8c074" },
-          { name: "页岩层", color: unit.color || "#6f756c" },
-          { name: "砂岩夹层", color: "#b87943" },
-          { name: "老地层基底", color: "#6f5f7f" },
+          { name: "松散覆盖层", color: "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
+          { name: "页岩层", color: unit.color || "#6f756c", textureFile: "legend_25_shale.png" },
+          { name: "砂岩夹层", color: "#b87943", textureFile: "legend_12_thin_bedded_or_shaly_sandstone.png" },
+          { name: "老地层基底", color: "#6f5f7f", textureFile: "legend_45_gneiss.png" },
         ];
       }
       return [
-        { name: unit.best_int_name || "地表单元", color: unit.color || "#d8c074" },
+        { name: unit.best_int_name || "地表单元", color: unit.color || "#d8c074", textureFile: "legend_01_soil_silt_or_alluvium.png" },
         ...defaultTerrainLayers.slice(1),
       ];
     } catch {
