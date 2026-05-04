@@ -45,8 +45,9 @@
   right: 76px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   gap: 8px;
+  width: 220px;
   z-index: 10;
   pointer-events: auto;
 }
@@ -54,12 +55,16 @@
 .controlBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: 100%;
+  min-height: 56px;
   padding: 10px 16px;
   background: var(--bg-panel);
   border: 1px solid var(--border);
   color: var(--text-primary);
   border-radius: 8px;
+  box-sizing: border-box;
   backdrop-filter: var(--glass-blur);
   cursor: pointer;
   font-weight: 500;
@@ -76,11 +81,17 @@
 }
 
 .actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
   background: var(--accent);
   color: #fff;
   border: none;
   padding: 10px 16px;
   border-radius: 8px;
+  box-sizing: border-box;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
