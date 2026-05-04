@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjMWUyOTNiIi8+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMSIgZmlsbD0iIzMzNCIvPjwvc3ZnPg==');
+  pointer-events: none;
 }
 
 .mapPlaceholder {
@@ -27,6 +27,7 @@
   align-items: center;
   gap: 12px;
   color: var(--text-secondary);
+  pointer-events: auto;
 }
 
 .mapIcon {
@@ -46,6 +47,7 @@
   flex-direction: column;
   gap: 8px;
   z-index: 10;
+  pointer-events: auto;
 }
 
 .controlBtn {
@@ -110,7 +112,7 @@
 }
 
 .profileArea.open {
-  height: 40%;
+  height: 52%;
 }
 
 .profileHeader {
@@ -151,7 +153,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff; /* White background for the actual SVG export visualization */
+  background: #fff;
   overflow: hidden;
 }
 
@@ -172,6 +174,57 @@
 .d3Svg {
   width: 100%;
   height: 100%;
+}
+
+.terrainViewer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #edf3f4;
+}
+
+.threeCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+.threeCanvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.terrainLegend {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: min(680px, calc(100% - 32px));
+  padding: 8px 10px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #17202a;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.terrainLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.terrainLegend i {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  border-radius: 2px;
 }
 
 @keyframes pulse {

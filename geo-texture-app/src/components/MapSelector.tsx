@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./MapSelector.module.css";
-import { PenTool, Map as MapIcon, RefreshCw, Download } from "lucide-react";
+import { PenTool, Map as MapIcon, RefreshCw, Download, Square } from "lucide-react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as d3 from "d3";
+import type { Feature, Polygon } from "geojson";
+import TerrainBlock3D, { type TerrainBlockData, type TerrainLayer } from "./TerrainBlock3D";
 
 interface MacrostratUnit {
   best_int_name?: string;
@@ -22,15 +24,52 @@ const fallbackAgeColors = {
   triassic: "#66FFCC",
 };
 
+const selectionSourceId = "terrain-block-selection-source";
+const selectionFillLayerId = "terrain-block-selection-fill";
+const selectionOutlineLayerId = "terrain-block-selection-outline";
+
+const defaultTerrainLayers: TerrainLayer[] = [
+  { name: "第四纪覆盖层", color: "#d8c074" },
+  { name: "砂岩层", color: "#b87943" },
+  { name: "灰岩层", color: "#8ca7a0" },
+  { name: "结晶基底", color: "#6f5f7f" },
+];
+
+const createSelectionFeature = (start: mapboxgl.LngLat, end: mapboxgl.LngLat): Feature<Polygon> => {
+  const west = Math.min(start.lng, end.lng);
+  const east = Math.max(start.lng, end.lng);
+  const south = Math.min(start.lat, end.lat);
+  const north = Math.max(start.lat, end.lat);
+
+  return {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Polygon",
+      coordinates: [[
+        [west, south],
+        [east, south],
+        [east, north],
+        [west, north],
+        [west, south],
+      ]],
+    },
+  };
+};
+
 export default function MapSelector() {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isSelectingBlock, setIsSelectingBlock] = useState(false);
   const [hasDrawnLine, setHasDrawnLine] = useState(false);
   const [hasProfile, setHasProfile] = useState(false);
   const [isEstimating, setIsEstimating] = useState(false);
+  const [isRenderingBlock, setIsRenderingBlock] = useState(false);
+  const [terrainBlock, setTerrainBlock] = useState<TerrainBlockData | null>(null);
   const d3Container = useRef<SVGSVGElement>(null);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const draw = useRef<MapboxDraw | null>(null);
+  const rectangleStart = useRef<mapboxgl.LngLat | null>(null);
 
   useEffect(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -149,8 +188,203 @@ export default function MapSelector() {
     };
   }, [isDrawing]);
 
+  const ensureSelectionLayers = useCallback(() => {
+    if (!map.current || !map.current.isStyleLoaded()) return false;
+
+    if (!map.current.getSource(selectionSourceId)) {
+      map.current.addSource(selectionSourceId, {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      });
+    }
+
+    if (!map.current.getLayer(selectionFillLayerId)) {
+      map.current.addLayer({
+        id: selectionFillLayerId,
+        type: "fill",
+        source: selectionSourceId,
+        paint: {
+          "fill-color": "#38bdf8",
+          "fill-opacity": 0.22,
+        },
+      });
+    }
+
+    if (!map.current.getLayer(selectionOutlineLayerId)) {
+      map.current.addLayer({
+        id: selectionOutlineLayerId,
+        type: "line",
+        source: selectionSourceId,
+        paint: {
+          "line-color": "#0f172a",
+          "line-width": 2,
+          "line-dasharray": [1.5, 1],
+        },
+      });
+    }
+
+    return true;
+  }, []);
+
+  const updateSelectionRectangle = useCallback((feature: Feature<Polygon>) => {
+    if (!map.current) return;
+    const source = map.current.getSource(selectionSourceId) as mapboxgl.GeoJSONSource | undefined;
+    source?.setData(feature);
+  }, []);
+
+  const inferTerrainLayers = useCallback(async (lat: number, lng: number): Promise<TerrainLayer[]> => {
+    try {
+      const response = await fetch(`https://macrostrat.org/api/v2/geologic_units/map?lat=${lat}&lng=${lng}`);
+      const data = await response.json();
+      const units = data?.success?.data as MacrostratUnit[] | undefined;
+      const unit = units?.[0];
+      if (!unit) return defaultTerrainLayers;
+
+      const lith = (unit.lith || "").toLowerCase();
+      if (lith.includes("limestone") || lith.includes("carbonate")) {
+        return [
+          { name: "碳酸盐盖层", color: unit.color || "#a9c2b8" },
+          { name: "厚层灰岩", color: "#8ca7a0" },
+          { name: "泥质夹层", color: "#7c6f62" },
+          { name: "结晶基底", color: "#6f5f7f" },
+        ];
+      }
+      if (lith.includes("granite") || lith.includes("intrusive") || lith.includes("plutonic")) {
+        return [
+          { name: "风化壳", color: "#c7a76f" },
+          { name: "花岗质侵入体", color: unit.color || "#c77878" },
+          { name: "接触变质带", color: "#815f75" },
+          { name: "深部基底", color: "#51475f" },
+        ];
+      }
+      if (lith.includes("shale")) {
+        return [
+          { name: "松散覆盖层", color: "#d8c074" },
+          { name: "页岩层", color: unit.color || "#6f756c" },
+          { name: "砂岩夹层", color: "#b87943" },
+          { name: "老地层基底", color: "#6f5f7f" },
+        ];
+      }
+      return [
+        { name: unit.best_int_name || "地表单元", color: unit.color || "#d8c074" },
+        ...defaultTerrainLayers.slice(1),
+      ];
+    } catch {
+      return defaultTerrainLayers;
+    }
+  }, []);
+
+  const buildTerrainBlock = useCallback(async (start: mapboxgl.LngLat, end: mapboxgl.LngLat) => {
+    if (!map.current) return;
+
+    setIsRenderingBlock(true);
+    setHasProfile(false);
+    setTerrainBlock(null);
+
+    const west = Math.min(start.lng, end.lng);
+    const east = Math.max(start.lng, end.lng);
+    const south = Math.min(start.lat, end.lat);
+    const north = Math.max(start.lat, end.lat);
+    const rows = 34;
+    const cols = 34;
+    const elevations: number[][] = [];
+    let minElevation = Number.POSITIVE_INFINITY;
+    let maxElevation = Number.NEGATIVE_INFINITY;
+
+    for (let row = 0; row < rows; row++) {
+      const lat = north - ((north - south) * row) / (rows - 1);
+      const line: number[] = [];
+      for (let col = 0; col < cols; col++) {
+        const lng = west + ((east - west) * col) / (cols - 1);
+        const queriedElevation = map.current.queryTerrainElevation([lng, lat]);
+        const fallbackRelief = Math.sin(row * 0.35) * 60 + Math.cos(col * 0.27) * 45;
+        const elevation = typeof queriedElevation === "number" ? queriedElevation : fallbackRelief;
+        line.push(elevation);
+        minElevation = Math.min(minElevation, elevation);
+        maxElevation = Math.max(maxElevation, elevation);
+      }
+      elevations.push(line);
+    }
+
+    if (maxElevation - minElevation < 1) {
+      elevations.forEach((line, row) => {
+        line.forEach((_, col) => {
+          const relief = Math.sin(row * 0.35) * 60 + Math.cos(col * 0.27) * 45;
+          elevations[row][col] = relief;
+          minElevation = Math.min(minElevation, relief);
+          maxElevation = Math.max(maxElevation, relief);
+        });
+      });
+    }
+
+    const midLat = (south + north) / 2;
+    const midLng = (west + east) / 2;
+    const layers = await inferTerrainLayers(midLat, midLng);
+
+    setTerrainBlock({
+      elevations,
+      bounds: { west, south, east, north },
+      minElevation,
+      maxElevation,
+      layers,
+    });
+    setIsRenderingBlock(false);
+  }, [inferTerrainLayers]);
+
+  useEffect(() => {
+    if (!map.current) return;
+    const currentMap = map.current;
+
+    if (!isSelectingBlock) {
+      currentMap.getCanvas().style.cursor = "";
+      return;
+    }
+
+    draw.current?.changeMode("simple_select");
+    currentMap.getCanvas().style.cursor = "crosshair";
+
+    const handleMouseDown = (event: mapboxgl.MapMouseEvent) => {
+      if (!ensureSelectionLayers()) return;
+      rectangleStart.current = event.lngLat;
+      currentMap.dragPan.disable();
+      updateSelectionRectangle(createSelectionFeature(event.lngLat, event.lngLat));
+    };
+
+    const handleMouseMove = (event: mapboxgl.MapMouseEvent) => {
+      if (!rectangleStart.current) return;
+      updateSelectionRectangle(createSelectionFeature(rectangleStart.current, event.lngLat));
+    };
+
+    const handleMouseUp = (event: mapboxgl.MapMouseEvent) => {
+      if (!rectangleStart.current) return;
+      const start = rectangleStart.current;
+      rectangleStart.current = null;
+      currentMap.dragPan.enable();
+      currentMap.getCanvas().style.cursor = "";
+      setIsSelectingBlock(false);
+      updateSelectionRectangle(createSelectionFeature(start, event.lngLat));
+      void buildTerrainBlock(start, event.lngLat);
+    };
+
+    currentMap.on("mousedown", handleMouseDown);
+    currentMap.on("mousemove", handleMouseMove);
+    currentMap.on("mouseup", handleMouseUp);
+
+    return () => {
+      currentMap.off("mousedown", handleMouseDown);
+      currentMap.off("mousemove", handleMouseMove);
+      currentMap.off("mouseup", handleMouseUp);
+      currentMap.dragPan.enable();
+      currentMap.getCanvas().style.cursor = "";
+    };
+  }, [buildTerrainBlock, ensureSelectionLayers, isSelectingBlock, updateSelectionRectangle]);
+
   const generateProfile = async () => {
     setIsDrawing(false);
+    setTerrainBlock(null);
     setIsEstimating(true);
     
     const elevationData: number[] = [];
@@ -388,11 +622,21 @@ export default function MapSelector() {
             <button 
               className={`${styles.controlBtn} ${isDrawing ? styles.active : ""}`}
               onClick={() => {
+                setIsSelectingBlock(false);
                 setIsDrawing(!isDrawing);
                 if (!isDrawing) setHasDrawnLine(false);
               }}
             >
               <PenTool size={16} /> 绘制剖面线
+            </button>
+            <button
+              className={`${styles.controlBtn} ${isSelectingBlock ? styles.active : ""}`}
+              onClick={() => {
+                setIsDrawing(false);
+                setIsSelectingBlock(!isSelectingBlock);
+              }}
+            >
+              <Square size={16} /> 框选 3D 地块
             </button>
             {(isDrawing || hasDrawnLine) && (
               <button className={styles.actionBtn} onClick={generateProfile}>
@@ -407,6 +651,7 @@ export default function MapSelector() {
               <h3>Mapbox GL JS 模块</h3>
               <p>请在 .env.local 中配置 NEXT_PUBLIC_MAPBOX_TOKEN</p>
               {isDrawing && <div className={styles.drawingHint}>在地图上点击绘制 A-B 剖面线...</div>}
+              {isSelectingBlock && <div className={styles.drawingHint}>按住鼠标拖出 3D 地块范围...</div>}
             </div>
           )}
         </div>
@@ -416,9 +661,9 @@ export default function MapSelector() {
       </div>
 
       {/* Bottom Profile Section */}
-      <div className={`${styles.profileArea} ${hasProfile || isEstimating ? styles.open : ""}`}>
+      <div className={`${styles.profileArea} ${hasProfile || isEstimating || terrainBlock || isRenderingBlock ? styles.open : ""}`}>
         <div className={styles.profileHeader}>
-          <h3>AI 生成的地下地质剖面</h3>
+          <h3>{terrainBlock || isRenderingBlock ? "DEM + 地下岩层 3D 地块" : "AI 生成的地下地质剖面"}</h3>
           {hasProfile && (
             <button className={styles.exportBtn}>
               <Download size={14} /> 导出 SVG
@@ -427,18 +672,31 @@ export default function MapSelector() {
         </div>
         
         <div className={styles.profileContent}>
-          {isEstimating && (
+          {(isEstimating || isRenderingBlock) && (
             <div className={styles.loader}>
               <RefreshCw size={24} className={styles.spin} />
-              <span>正在获取 Macrostrat 地层柱状数据...</span>
-              <span>正在运行 AI 地下结构推演...</span>
+              {isRenderingBlock ? (
+                <>
+                  <span>正在采样 Mapbox DEM...</span>
+                  <span>正在构建 3D 地形块和地下岩层...</span>
+                </>
+              ) : (
+                <>
+                  <span>正在获取 Macrostrat 地层柱状数据...</span>
+                  <span>正在运行 AI 地下结构推演...</span>
+                </>
+              )}
             </div>
+          )}
+
+          {terrainBlock && !isRenderingBlock && (
+            <TerrainBlock3D data={terrainBlock} />
           )}
           
           <svg 
             ref={d3Container} 
             className={styles.d3Svg}
-            style={{ display: hasProfile && !isEstimating ? "block" : "none" }}
+            style={{ display: hasProfile && !isEstimating && !terrainBlock ? "block" : "none" }}
           />
         </div>
       </div>
