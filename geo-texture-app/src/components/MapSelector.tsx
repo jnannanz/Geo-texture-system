@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./MapSelector.module.css";
 import { PenTool, Map as MapIcon, RefreshCw, Download, Square } from "lucide-react";
 import mapboxgl from "mapbox-gl";
