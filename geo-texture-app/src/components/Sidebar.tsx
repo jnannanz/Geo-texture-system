@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./Sidebar.module.css";
 import geologicAgesData from "../config/geologic_ages.json";
 import lithologyData from "../config/lithology-patterns.json";
