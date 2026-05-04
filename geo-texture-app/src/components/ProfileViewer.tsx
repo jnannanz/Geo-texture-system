@@ -65,10 +65,10 @@ export default function ProfileViewer({ selectedEra, selectedLithology }: Profil
       {!svgContent ? (
         <div className={styles.uploadState}>
           <Upload size={48} className={styles.uploadIcon} />
-          <h2>Upload Profile SVG</h2>
-          <p>Export your line art from Illustrator as SVG and drop it here.</p>
+          <h2>上传剖面 SVG</h2>
+          <p>从 Illustrator 导出线稿 SVG 文件并上传到此处。</p>
           <label className={styles.uploadBtn}>
-            Select SVG File
+            选择 SVG 文件
             <input type="file" accept=".svg" onChange={handleFileUpload} hidden />
           </label>
         </div>

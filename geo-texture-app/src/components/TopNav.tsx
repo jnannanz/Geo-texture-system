@@ -23,19 +23,19 @@ export default function TopNav({ activeMode, onModeChange }: TopNavProps) {
           onClick={() => onModeChange("cloud")}
         >
           <Map size={18} />
-          <span>Cloud Cross-Section</span>
+          <span>云端剖面推演</span>
         </button>
         <button 
           className={`${styles.modeBtn} ${activeMode === "local" ? styles.active : ""}`}
           onClick={() => onModeChange("local")}
         >
           <PenTool size={18} />
-          <span>Local 2D SVG</span>
+          <span>本地 SVG 填色</span>
         </button>
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.exportBtn}>Export</button>
+        <button className={styles.exportBtn}>导出</button>
       </div>
     </header>
   );

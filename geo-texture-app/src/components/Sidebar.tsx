@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./Sidebar.module.css";
 import geologicAgesData from "../config/geologic_ages.json";
 import lithologyData from "../config/lithology-patterns.json";
@@ -40,13 +40,13 @@ export default function Sidebar({
           className={`${styles.tabBtn} ${activeTab === "era" ? styles.active : ""}`}
           onClick={() => setActiveTab("era")}
         >
-          <Palette size={16} /> Era Colors
+          <Palette size={16} /> 地质年代颜色
         </button>
         <button 
           className={`${styles.tabBtn} ${activeTab === "lithology" ? styles.active : ""}`}
           onClick={() => setActiveTab("lithology")}
         >
-          <Layers size={16} /> Lithology
+          <Layers size={16} /> 岩性纹理
         </button>
       </div>
 
@@ -64,7 +64,16 @@ export default function Sidebar({
                 </div>
                 <div className={styles.eraInfo}>
                   <div className={styles.eraName}>{era.name}</div>
-                  <div className={styles.eraCode}>CMYK: {era.cmyk}</div>
+                  <div className={styles.eraCode}>
+                    CMYK: {(() => {
+                      if (!era.cmyk) return "0, 0, 0, 0";
+                      const c = parseInt(era.cmyk[0] || "0") * 10;
+                      const m = parseInt(era.cmyk[1] || "0") * 10;
+                      const y = parseInt(era.cmyk[2] || "0") * 10;
+                      const k = era.cmyk[3] ? parseInt(era.cmyk[3]) * 10 : 0;
+                      return `${c}-${m}-${y}-${k}`;
+                    })()}
+                  </div>
                 </div>
               </div>
             ))}

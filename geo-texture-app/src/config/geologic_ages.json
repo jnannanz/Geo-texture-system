@@ -1,78 +1,78 @@
 [
   {
-    "name": "Quaternary",
+    "name": "第四纪",
     "symbol": "Q",
     "cmyk": "007",
     "hex": "#FFFF4D"
   },
   {
-    "name": "Tertiary",
+    "name": "第三纪",
     "symbol": "T",
     "cmyk": "037",
     "hex": "#FFB24D"
   },
   {
-    "name": "Cretaceous",
+    "name": "白垩纪",
     "symbol": "K",
     "cmyk": "507",
     "hex": "#80FF4D"
   },
   {
-    "name": "Jurassic",
+    "name": "侏罗纪",
     "symbol": "J",
     "cmyk": "604",
     "hex": "#66FF99"
   },
   {
-    "name": "Triassic",
+    "name": "三叠纪",
     "symbol": "Tr",
     "cmyk": "602",
     "hex": "#66FFCC"
   },
   {
-    "name": "Permian",
+    "name": "二叠纪",
     "symbol": "P",
     "cmyk": "600",
     "hex": "#66FFFF"
   },
   {
-    "name": "Pennsylvanian",
+    "name": "宾夕法尼亚纪",
     "symbol": "IP",
     "cmyk": "620",
     "hex": "#66CCFF"
   },
   {
-    "name": "Mississippian",
+    "name": "密西西比纪",
     "symbol": "M",
     "cmyk": "431",
     "hex": "#99B2DE"
   },
   {
-    "name": "Devonian",
+    "name": "泥盆纪",
     "symbol": "D",
     "cmyk": "540",
     "hex": "#8099FF"
   },
   {
-    "name": "Silurian",
+    "name": "志留纪",
     "symbol": "S",
     "cmyk": "350",
     "hex": "#B280FF"
   },
   {
-    "name": "Ordovician",
+    "name": "奥陶纪",
     "symbol": "O",
     "cmyk": "051",
     "hex": "#FF80DE"
   },
   {
-    "name": "Cambrian",
+    "name": "寒武纪",
     "symbol": "C",
     "cmyk": "054",
     "hex": "#FF8099"
   },
   {
-    "name": "Precambrian",
+    "name": "前寒武纪",
     "symbol": "pC",
     "cmyk": "446",
     "hex": "#999966"

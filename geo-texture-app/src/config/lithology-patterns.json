@@ -1,377 +1,377 @@
 [
   {
     "id": "pattern-1",
-    "name": "Soil, silt, or alluvium",
-    "category": "Sedimentary (Clastic)"
+    "name": "土壤、粉砂或冲积物",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-2",
-    "name": "Sand",
-    "category": "Sedimentary (Clastic)"
+    "name": "砂",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-3",
-    "name": "Gravel and stratified drift",
-    "category": "Sedimentary (Clastic)"
+    "name": "砾石与成层冰水堆积物",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-4",
-    "name": "Glacial till and moraines a",
-    "category": "Sedimentary (Clastic)"
+    "name": "冰碛物与终碛（a, b 两种花纹）",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-5",
-    "name": "Glacial till and moraines b",
-    "category": "Sedimentary (Clastic)"
+    "name": "冰碛物与终碛（续，a, b 两种花纹）",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-6",
-    "name": "Loess",
-    "category": "Sedimentary (Clastic)"
+    "name": "黄土",
+    "category": "一、表层堆积物"
   },
   {
     "id": "pattern-7",
-    "name": "Conglomerate",
-    "category": "Sedimentary (Clastic)"
+    "name": "砾岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-8",
-    "name": "Massive sandstone",
-    "category": "Sedimentary (Clastic)"
+    "name": "块状砂岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-9",
-    "name": "Bedded sandstone",
-    "category": "Sedimentary (Clastic)"
+    "name": "层状砂岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-10",
-    "name": "Cross-bedded sandstone",
-    "category": "Sedimentary (Clastic)"
+    "name": "交错层理砂岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-11",
-    "name": "Quartzite",
-    "category": "Metamorphic"
+    "name": "石英岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-12",
-    "name": "Thin-bedded or shaly sandstone",
-    "category": "Sedimentary (Clastic)"
+    "name": "薄层砂岩或页岩质砂岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-13",
-    "name": "Calcareous sandstone",
-    "category": "Sedimentary (Clastic)"
+    "name": "钙质砂岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-14",
-    "name": "Sandy limestone",
-    "category": "Sedimentary (Clastic)"
+    "name": "砂质灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-15",
-    "name": "Massively bedded limestone",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "厚层（块状）灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-16",
-    "name": "Thin-bedded limestone",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "薄层灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-17",
-    "name": "Limestone containing nodules of chert or flint",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "含燧石或火石结核的灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-18",
-    "name": "Bedded chert",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "层状燧石",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-19",
-    "name": "Dolomite",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "白云岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-20",
-    "name": "Marble",
-    "category": "Metamorphic"
+    "name": "大理岩（a, b 两种花纹）",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-21",
-    "name": "Crystalline limestone",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "结晶质灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-22",
-    "name": "Chalk",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "白垩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-23",
-    "name": "Clayey or argillaceous limestone",
-    "category": "Sedimentary (Clastic)"
+    "name": "泥质灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-24",
-    "name": "Calcareous shale or shaly limestone",
-    "category": "Sedimentary (Clastic)"
+    "name": "钙质页岩或页岩质灰岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-25",
-    "name": "Shale",
-    "category": "Sedimentary (Clastic)"
+    "name": "页岩（a, b 两种花纹）",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-26",
-    "name": "Sandy shale",
-    "category": "Sedimentary (Clastic)"
+    "name": "砂质页岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-27",
-    "name": "Slate",
-    "category": "Metamorphic"
+    "name": "板岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-28",
-    "name": "Clay",
-    "category": "Sedimentary (Clastic)"
+    "name": "黏土（a, b 两种花纹）",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-29",
-    "name": "Sandy clay",
-    "category": "Sedimentary (Clastic)"
+    "name": "砂质黏土",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-30",
-    "name": "Fire clay or flint clay",
-    "category": "Sedimentary (Clastic)"
+    "name": "耐火黏土或燧石黏土",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-31",
-    "name": "Coal",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "煤",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-32",
-    "name": "Bony coal or impure coal",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "骨煤或不纯煤",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-33",
-    "name": "Bone",
-    "category": "Other"
+    "name": "矸石（煤系夹矸）",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-34",
-    "name": "Cannel coal",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "烛煤",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-35",
-    "name": "Cannel shale",
-    "category": "Sedimentary (Clastic)"
+    "name": "烛煤页岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-36",
-    "name": "Carbonaceous shale",
-    "category": "Sedimentary (Clastic)"
+    "name": "炭质页岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-37",
-    "name": "Gypsum",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "石膏",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-38",
-    "name": "Salt",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "岩盐",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-39",
-    "name": "Phosphate rock",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "磷块岩（a, b 两种花纹）",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-40",
-    "name": "Breccia",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "角砾岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-41",
-    "name": "Peat",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "泥炭",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-42",
-    "name": "Oil shale",
-    "category": "Sedimentary (Clastic)"
+    "name": "油页岩",
+    "category": "二、沉积岩"
   },
   {
     "id": "pattern-43",
-    "name": "Metamorphism",
-    "category": "Metamorphic"
+    "name": "变质作用通用花纹",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-44",
-    "name": "Schistose or gneissoid granite",
-    "category": "Metamorphic"
+    "name": "片状或片麻状花岗岩",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-45",
-    "name": "Gneiss",
-    "category": "Metamorphic"
+    "name": "片麻岩",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-46",
-    "name": "Contorted gneiss",
-    "category": "Metamorphic"
+    "name": "揉皱片麻岩",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-47",
-    "name": "Gneiss and schist",
-    "category": "Metamorphic"
+    "name": "片麻岩与片岩互层",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-48",
-    "name": "Schist",
-    "category": "Metamorphic"
+    "name": "片岩",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-49",
-    "name": "Contorted schist",
-    "category": "Metamorphic"
+    "name": "揉皱片岩",
+    "category": "三、变质岩"
   },
   {
     "id": "pattern-50",
-    "name": "Volcanic breccia and tuff",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "火山角砾岩与凝灰岩",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-51",
-    "name": "Volcanic breccia or agglomerate",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "火山角砾岩或集块岩",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-52",
-    "name": "Basaltic flows",
-    "category": "Sedimentary (Chemical/Organic)"
+    "name": "玄武岩流（柱状节理）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-53",
-    "name": "Bedded lava andesitic",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "层状熔岩（安山质）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-54",
-    "name": "Bedded lava and tuff",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "层状熔岩与凝灰岩",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-55",
-    "name": "Granite",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "花岗岩",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-56",
-    "name": "Soapstone talc and serpentine",
-    "category": "Other"
+    "name": "皂石、滑石与蛇纹岩",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-57",
-    "name": "Massive igneous rock 57",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹一）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-58",
-    "name": "Massive igneous rock 58",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹二）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-59",
-    "name": "Massive igneous rock 59",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹三）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-60",
-    "name": "Massive igneous rock 60",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹四）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-61",
-    "name": "Massive igneous rock 61",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（a, b 两种花纹）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-62",
-    "name": "Porphyritic rock 62",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "斑状岩（花纹一）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-63",
-    "name": "Porphyritic rock 63",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "斑状岩（花纹二）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-64",
-    "name": "Porphyritic rock 64",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "斑状岩（花纹三）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-65",
-    "name": "Massive igneous rock 65",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹五）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-66",
-    "name": "Massive igneous rock 66",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹六）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-67",
-    "name": "Massive igneous rock 67",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹七）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-68",
-    "name": "Massive igneous rock 68",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "块状火成岩（花纹八）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-69",
-    "name": "Brecciated rock",
-    "category": "Igneous (Volcanic/Plutonic)"
+    "name": "角砾化岩石",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-70",
-    "name": "Quartz",
-    "category": "Other"
+    "name": "石英（脉）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-71",
-    "name": "Ore solid black in thin areas",
-    "category": "Other"
+    "name": "矿石（薄处以纯黑表示）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-72",
-    "name": "Ore",
-    "category": "Other"
+    "name": "矿石",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-73",
-    "name": "Lean ore",
-    "category": "Other"
+    "name": "贫矿石",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-74",
-    "name": "Bedrock kind not indicated",
-    "category": "Other"
+    "name": "基岩（未注明岩性）",
+    "category": "四、火成岩与脉岩"
   },
   {
     "id": "pattern-75",
-    "name": "Blank",
-    "category": "Other"
+    "name": "(空白图例,备用)",
+    "category": "四、火成岩与脉岩"
   }
 ]

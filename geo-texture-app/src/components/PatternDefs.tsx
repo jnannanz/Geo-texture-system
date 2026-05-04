@@ -4,7 +4,7 @@ export default function PatternDefs() {
   return (
     <svg style={{ width: 0, height: 0, position: "absolute" }} aria-hidden="true">
       <defs>
-      <pattern id="pattern-1" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-1" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>01 Soil, silt, or alluvium</title>
@@ -13,7 +13,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-2" patternUnits="userSpaceOnUse" width="264" height="146" viewBox="0 0 264 146">
+      <pattern patternTransform="scale(0.5)" id="pattern-2" patternUnits="userSpaceOnUse" width="264" height="146" viewBox="0 0 264 146">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>02 Sand</title>
@@ -22,7 +22,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-3" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-3" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>03 Gravel and stratified drift</title>
@@ -31,7 +31,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-4" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-4" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>04 Glacial till and moraines a</title>
@@ -40,7 +40,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-5" patternUnits="userSpaceOnUse" width="257" height="144" viewBox="0 0 257 144">
+      <pattern patternTransform="scale(0.5)" id="pattern-5" patternUnits="userSpaceOnUse" width="257" height="144" viewBox="0 0 257 144">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>05 Glacial till and moraines b</title>
@@ -49,7 +49,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-6" patternUnits="userSpaceOnUse" width="268" height="139" viewBox="0 0 268 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-6" patternUnits="userSpaceOnUse" width="268" height="139" viewBox="0 0 268 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>06 Loess</title>
@@ -58,7 +58,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-7" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-7" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>07 Conglomerate</title>
@@ -67,7 +67,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-8" patternUnits="userSpaceOnUse" width="267" height="141" viewBox="0 0 267 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-8" patternUnits="userSpaceOnUse" width="267" height="141" viewBox="0 0 267 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>08 Massive sandstone</title>
@@ -76,7 +76,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-9" patternUnits="userSpaceOnUse" width="269" height="143" viewBox="0 0 269 143">
+      <pattern patternTransform="scale(0.5)" id="pattern-9" patternUnits="userSpaceOnUse" width="269" height="143" viewBox="0 0 269 143">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>09 Bedded sandstone</title>
@@ -85,7 +85,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-10" patternUnits="userSpaceOnUse" width="255" height="143" viewBox="0 0 255 143">
+      <pattern patternTransform="scale(0.5)" id="pattern-10" patternUnits="userSpaceOnUse" width="255" height="143" viewBox="0 0 255 143">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>10 Cross-bedded sandstone</title>
@@ -94,7 +94,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-11" patternUnits="userSpaceOnUse" width="265" height="139" viewBox="0 0 265 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-11" patternUnits="userSpaceOnUse" width="265" height="139" viewBox="0 0 265 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>11 Quartzite</title>
@@ -103,7 +103,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-12" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-12" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>12 Thin-bedded or shaly sandstone</title>
@@ -112,7 +112,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-13" patternUnits="userSpaceOnUse" width="267" height="144" viewBox="0 0 267 144">
+      <pattern patternTransform="scale(0.5)" id="pattern-13" patternUnits="userSpaceOnUse" width="267" height="144" viewBox="0 0 267 144">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>13 Calcareous sandstone</title>
@@ -121,7 +121,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-14" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-14" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>14 Sandy limestone</title>
@@ -130,7 +130,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-15" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-15" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>15 Massively bedded limestone</title>
@@ -139,7 +139,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-16" patternUnits="userSpaceOnUse" width="267" height="136" viewBox="0 0 267 136">
+      <pattern patternTransform="scale(0.5)" id="pattern-16" patternUnits="userSpaceOnUse" width="267" height="136" viewBox="0 0 267 136">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>16 Thin-bedded limestone</title>
@@ -148,7 +148,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-17" patternUnits="userSpaceOnUse" width="268" height="140" viewBox="0 0 268 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-17" patternUnits="userSpaceOnUse" width="268" height="140" viewBox="0 0 268 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>17 Limestone containing nodules of chert or flint</title>
@@ -157,7 +157,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-18" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-18" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>18 Bedded chert</title>
@@ -166,7 +166,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-19" patternUnits="userSpaceOnUse" width="272" height="141" viewBox="0 0 272 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-19" patternUnits="userSpaceOnUse" width="272" height="141" viewBox="0 0 272 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>19 Dolomite</title>
@@ -175,7 +175,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-20" patternUnits="userSpaceOnUse" width="255" height="141" viewBox="0 0 255 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-20" patternUnits="userSpaceOnUse" width="255" height="141" viewBox="0 0 255 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>20 Marble</title>
@@ -184,7 +184,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-21" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-21" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>21 Crystalline limestone</title>
@@ -193,7 +193,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-22" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-22" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>22 Chalk</title>
@@ -202,7 +202,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-23" patternUnits="userSpaceOnUse" width="269" height="142" viewBox="0 0 269 142">
+      <pattern patternTransform="scale(0.5)" id="pattern-23" patternUnits="userSpaceOnUse" width="269" height="142" viewBox="0 0 269 142">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>23 Clayey or argillaceous limestone</title>
@@ -211,7 +211,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-24" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-24" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>24 Calcareous shale or shaly limestone</title>
@@ -220,7 +220,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-25" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-25" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>25 Shale</title>
@@ -229,7 +229,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-26" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-26" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>26 Sandy shale</title>
@@ -238,7 +238,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-27" patternUnits="userSpaceOnUse" width="266" height="140" viewBox="0 0 266 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-27" patternUnits="userSpaceOnUse" width="266" height="140" viewBox="0 0 266 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>27 Slate</title>
@@ -247,7 +247,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-28" patternUnits="userSpaceOnUse" width="265" height="141" viewBox="0 0 265 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-28" patternUnits="userSpaceOnUse" width="265" height="141" viewBox="0 0 265 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>28 Clay</title>
@@ -256,7 +256,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-29" patternUnits="userSpaceOnUse" width="268" height="141" viewBox="0 0 268 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-29" patternUnits="userSpaceOnUse" width="268" height="141" viewBox="0 0 268 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>29 Sandy clay</title>
@@ -265,7 +265,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-30" patternUnits="userSpaceOnUse" width="254" height="141" viewBox="0 0 254 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-30" patternUnits="userSpaceOnUse" width="254" height="141" viewBox="0 0 254 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>30 Fire clay or flint clay</title>
@@ -274,7 +274,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-31" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-31" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>31 Coal</title>
@@ -283,7 +283,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-32" patternUnits="userSpaceOnUse" width="268" height="139" viewBox="0 0 268 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-32" patternUnits="userSpaceOnUse" width="268" height="139" viewBox="0 0 268 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>32 Bony coal or impure coal</title>
@@ -292,7 +292,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-33" patternUnits="userSpaceOnUse" width="269" height="141" viewBox="0 0 269 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-33" patternUnits="userSpaceOnUse" width="269" height="141" viewBox="0 0 269 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>33 Bone</title>
@@ -301,7 +301,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-34" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-34" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>34 Cannel coal</title>
@@ -310,7 +310,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-35" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-35" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>35 Cannel shale</title>
@@ -319,7 +319,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-36" patternUnits="userSpaceOnUse" width="269" height="139" viewBox="0 0 269 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-36" patternUnits="userSpaceOnUse" width="269" height="139" viewBox="0 0 269 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>36 Carbonaceous shale</title>
@@ -328,7 +328,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-37" patternUnits="userSpaceOnUse" width="266" height="137" viewBox="0 0 266 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-37" patternUnits="userSpaceOnUse" width="266" height="137" viewBox="0 0 266 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>37 Gypsum</title>
@@ -337,7 +337,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-38" patternUnits="userSpaceOnUse" width="265" height="141" viewBox="0 0 265 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-38" patternUnits="userSpaceOnUse" width="265" height="141" viewBox="0 0 265 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>38 Salt</title>
@@ -346,7 +346,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-39" patternUnits="userSpaceOnUse" width="265" height="136" viewBox="0 0 265 136">
+      <pattern patternTransform="scale(0.5)" id="pattern-39" patternUnits="userSpaceOnUse" width="265" height="136" viewBox="0 0 265 136">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>39 Phosphate rock</title>
@@ -355,7 +355,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-40" patternUnits="userSpaceOnUse" width="268" height="136" viewBox="0 0 268 136">
+      <pattern patternTransform="scale(0.5)" id="pattern-40" patternUnits="userSpaceOnUse" width="268" height="136" viewBox="0 0 268 136">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>40 Breccia</title>
@@ -364,7 +364,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-41" patternUnits="userSpaceOnUse" width="259" height="140" viewBox="0 0 259 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-41" patternUnits="userSpaceOnUse" width="259" height="140" viewBox="0 0 259 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>41 Peat</title>
@@ -373,7 +373,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-42" patternUnits="userSpaceOnUse" width="269" height="136" viewBox="0 0 269 136">
+      <pattern patternTransform="scale(0.5)" id="pattern-42" patternUnits="userSpaceOnUse" width="269" height="136" viewBox="0 0 269 136">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>42 Oil shale</title>
@@ -382,7 +382,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-43" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-43" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>43 Metamorphism</title>
@@ -391,7 +391,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-44" patternUnits="userSpaceOnUse" width="272" height="140" viewBox="0 0 272 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-44" patternUnits="userSpaceOnUse" width="272" height="140" viewBox="0 0 272 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>44 Schistose or gneissoid granite</title>
@@ -400,7 +400,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-45" patternUnits="userSpaceOnUse" width="260" height="141" viewBox="0 0 260 141">
+      <pattern patternTransform="scale(0.5)" id="pattern-45" patternUnits="userSpaceOnUse" width="260" height="141" viewBox="0 0 260 141">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>45 Gneiss</title>
@@ -409,7 +409,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-46" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-46" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>46 Contorted gneiss</title>
@@ -418,7 +418,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-47" patternUnits="userSpaceOnUse" width="269" height="137" viewBox="0 0 269 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-47" patternUnits="userSpaceOnUse" width="269" height="137" viewBox="0 0 269 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>47 Gneiss and schist</title>
@@ -427,7 +427,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-48" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-48" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>48 Schist</title>
@@ -436,7 +436,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-49" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-49" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>49 Contorted schist</title>
@@ -445,7 +445,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-50" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-50" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>50 Volcanic breccia and tuff</title>
@@ -454,7 +454,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-51" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-51" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>51 Volcanic breccia or agglomerate</title>
@@ -463,7 +463,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-52" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-52" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>52 Basaltic flows</title>
@@ -472,7 +472,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-53" patternUnits="userSpaceOnUse" width="254" height="138" viewBox="0 0 254 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-53" patternUnits="userSpaceOnUse" width="254" height="138" viewBox="0 0 254 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>53 Bedded lava andesitic</title>
@@ -481,7 +481,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-54" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-54" patternUnits="userSpaceOnUse" width="266" height="138" viewBox="0 0 266 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>54 Bedded lava and tuff</title>
@@ -490,7 +490,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-55" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-55" patternUnits="userSpaceOnUse" width="267" height="138" viewBox="0 0 267 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>55 Granite</title>
@@ -499,7 +499,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-56" patternUnits="userSpaceOnUse" width="269" height="137" viewBox="0 0 269 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-56" patternUnits="userSpaceOnUse" width="269" height="137" viewBox="0 0 269 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>56 Soapstone talc and serpentine</title>
@@ -508,7 +508,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-57" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-57" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>57 Massive igneous rock 57</title>
@@ -517,7 +517,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-58" patternUnits="userSpaceOnUse" width="267" height="137" viewBox="0 0 267 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-58" patternUnits="userSpaceOnUse" width="267" height="137" viewBox="0 0 267 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>58 Massive igneous rock 58</title>
@@ -526,7 +526,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-59" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-59" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>59 Massive igneous rock 59</title>
@@ -535,7 +535,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-60" patternUnits="userSpaceOnUse" width="265" height="139" viewBox="0 0 265 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-60" patternUnits="userSpaceOnUse" width="265" height="139" viewBox="0 0 265 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>60 Massive igneous rock 60</title>
@@ -544,7 +544,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-61" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-61" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>61 Massive igneous rock 61</title>
@@ -553,7 +553,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-62" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-62" patternUnits="userSpaceOnUse" width="268" height="138" viewBox="0 0 268 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>62 Porphyritic rock 62</title>
@@ -562,7 +562,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-63" patternUnits="userSpaceOnUse" width="253" height="137" viewBox="0 0 253 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-63" patternUnits="userSpaceOnUse" width="253" height="137" viewBox="0 0 253 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>63 Porphyritic rock 63</title>
@@ -571,7 +571,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-64" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-64" patternUnits="userSpaceOnUse" width="266" height="139" viewBox="0 0 266 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>64 Porphyritic rock 64</title>
@@ -580,7 +580,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-65" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-65" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>65 Massive igneous rock 65</title>
@@ -589,7 +589,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-66" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-66" patternUnits="userSpaceOnUse" width="269" height="138" viewBox="0 0 269 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>66 Massive igneous rock 66</title>
@@ -598,7 +598,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-67" patternUnits="userSpaceOnUse" width="263" height="138" viewBox="0 0 263 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-67" patternUnits="userSpaceOnUse" width="263" height="138" viewBox="0 0 263 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>67 Massive igneous rock 67</title>
@@ -607,7 +607,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-68" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
+      <pattern patternTransform="scale(0.5)" id="pattern-68" patternUnits="userSpaceOnUse" width="267" height="139" viewBox="0 0 267 139">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>68 Massive igneous rock 68</title>
@@ -616,7 +616,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-69" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
+      <pattern patternTransform="scale(0.5)" id="pattern-69" patternUnits="userSpaceOnUse" width="267" height="140" viewBox="0 0 267 140">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>69 Brecciated rock</title>
@@ -625,7 +625,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-70" patternUnits="userSpaceOnUse" width="266" height="137" viewBox="0 0 266 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-70" patternUnits="userSpaceOnUse" width="266" height="137" viewBox="0 0 266 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>70 Quartz</title>
@@ -634,7 +634,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-71" patternUnits="userSpaceOnUse" width="267" height="136" viewBox="0 0 267 136">
+      <pattern patternTransform="scale(0.5)" id="pattern-71" patternUnits="userSpaceOnUse" width="267" height="136" viewBox="0 0 267 136">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>71 Ore solid black in thin areas</title>
@@ -643,7 +643,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-72" patternUnits="userSpaceOnUse" width="264" height="138" viewBox="0 0 264 138">
+      <pattern patternTransform="scale(0.5)" id="pattern-72" patternUnits="userSpaceOnUse" width="264" height="138" viewBox="0 0 264 138">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>72 Ore</title>
@@ -652,7 +652,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-73" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-73" patternUnits="userSpaceOnUse" width="268" height="137" viewBox="0 0 268 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>73 Lean ore</title>
@@ -661,7 +661,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-74" patternUnits="userSpaceOnUse" width="260" height="137" viewBox="0 0 260 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-74" patternUnits="userSpaceOnUse" width="260" height="137" viewBox="0 0 260 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>74 Bedrock kind not indicated</title>
@@ -670,7 +670,7 @@ export default function PatternDefs() {
   "/>
         </g>
       </pattern>
-      <pattern id="pattern-75" patternUnits="userSpaceOnUse" width="267" height="137" viewBox="0 0 267 137">
+      <pattern patternTransform="scale(0.5)" id="pattern-75" patternUnits="userSpaceOnUse" width="267" height="137" viewBox="0 0 267 137">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           {/* User can optionally style the path fill by overriding the currentColor, but we keep the raw paths */}
           <title>75 Blank</title>
