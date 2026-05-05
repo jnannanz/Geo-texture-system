@@ -9,7 +9,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as d3 from "d3";
 import type { Feature, Polygon } from "geojson";
-import TerrainBlock3D, { type TerrainBlockData, type TerrainLayer } from "./TerrainBlock3D";
+import TerrainBlock3D, { type SurfaceTextureOption, type TerrainBlockData, type TerrainLayer } from "./TerrainBlock3D";
 
 interface MacrostratUnit {
   best_int_name?: string;
@@ -24,11 +24,19 @@ const fallbackAgeColors = {
   triassic: "#66FFCC",
 };
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
 const selectionSourceId = "terrain-block-selection-source";
 const selectionFillLayerId = "terrain-block-selection-fill";
 const selectionOutlineLayerId = "terrain-block-selection-outline";
+const esriImageryTileUrl = "https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const maxSatelliteTextureSize = 768;
 const minSatelliteTextureSize = 320;
+const maxEsriTextureZoom = 16;
+const minEsriTextureZoom = 8;
+const esriTileSize = 256;
 const defaultSurfaceTextureStyle = "bag326/cluwjr06f002o01pphuck9mrm";
 const chinaStartCenters: Array<[number, number]> = [
   [116.4074, 39.9042],
@@ -191,6 +199,116 @@ function buildMapboxSatelliteTextureUrl(bounds: TerrainBlockData["bounds"], toke
   });
 
   return `https://api.mapbox.com/styles/v1/${normalizedStylePath}/static/${bbox}/${width}x${height}@2x?${params.toString()}`;
+}
+
+function normalizedMercatorX(lng: number) {
+  return (lng + 180) / 360;
+}
+
+function normalizedMercatorYForTexture(lat: number) {
+  const clampedLat = Math.min(Math.max(lat, -85.05112878), 85.05112878);
+  return (1 - Math.log(Math.tan(Math.PI / 4 + (clampedLat * Math.PI) / 360)) / Math.PI) / 2;
+}
+
+function chooseEsriTextureZoom(bounds: TerrainBlockData["bounds"], targetWidth: number, targetHeight: number) {
+  const westX = normalizedMercatorX(bounds.west);
+  const eastX = normalizedMercatorX(bounds.east);
+  const northY = normalizedMercatorYForTexture(bounds.north);
+  const southY = normalizedMercatorYForTexture(bounds.south);
+  const xSpan = Math.max(eastX - westX, 0.000001);
+  const ySpan = Math.max(southY - northY, 0.000001);
+  const requiredScale = Math.max(targetWidth / xSpan, targetHeight / ySpan);
+  return clamp(Math.ceil(Math.log2(requiredScale / 256)), minEsriTextureZoom, maxEsriTextureZoom);
+}
+
+function loadImage(url: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = url;
+  });
+}
+
+async function buildEsriImageryTextureDataUrl(bounds: TerrainBlockData["bounds"]) {
+  const { width, height } = getSatelliteTextureSize(bounds);
+  const zoom = chooseEsriTextureZoom(bounds, width, height);
+  const tileCount = 2 ** zoom;
+  const westWorld = normalizedMercatorX(bounds.west) * tileCount;
+  const eastWorld = normalizedMercatorX(bounds.east) * tileCount;
+  const northWorld = normalizedMercatorYForTexture(bounds.north) * tileCount;
+  const southWorld = normalizedMercatorYForTexture(bounds.south) * tileCount;
+  const minTileX = Math.floor(westWorld);
+  const maxTileX = Math.ceil(eastWorld) - 1;
+  const minTileY = Math.floor(northWorld);
+  const maxTileY = Math.ceil(southWorld) - 1;
+  const mosaicWidth = Math.max((maxTileX - minTileX + 1) * esriTileSize, esriTileSize);
+  const mosaicHeight = Math.max((maxTileY - minTileY + 1) * esriTileSize, esriTileSize);
+  const mosaicCanvas = document.createElement("canvas");
+  mosaicCanvas.width = mosaicWidth;
+  mosaicCanvas.height = mosaicHeight;
+  const mosaicContext = mosaicCanvas.getContext("2d");
+  if (!mosaicContext) return undefined;
+
+  mosaicContext.fillStyle = "#d8e0d2";
+  mosaicContext.fillRect(0, 0, mosaicWidth, mosaicHeight);
+  mosaicContext.imageSmoothingEnabled = false;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  if (!context) return undefined;
+
+  context.fillStyle = "#d8e0d2";
+  context.fillRect(0, 0, width, height);
+
+  const tileJobs: Promise<void>[] = [];
+
+  for (let tileX = minTileX; tileX <= maxTileX; tileX++) {
+    for (let tileY = minTileY; tileY <= maxTileY; tileY++) {
+      const wrappedX = ((tileX % tileCount) + tileCount) % tileCount;
+      if (tileY < 0 || tileY >= tileCount) continue;
+
+      const url = esriImageryTileUrl
+        .replace("{z}", String(zoom))
+        .replace("{y}", String(tileY))
+        .replace("{x}", String(wrappedX));
+
+      tileJobs.push(loadImage(url).then((image) => {
+        const left = (tileX - minTileX) * esriTileSize;
+        const top = (tileY - minTileY) * esriTileSize;
+        mosaicContext.drawImage(image, left, top, esriTileSize, esriTileSize);
+      }).catch(() => undefined));
+    }
+  }
+
+  await Promise.all(tileJobs);
+
+  const sourceX = (westWorld - minTileX) * esriTileSize;
+  const sourceY = (northWorld - minTileY) * esriTileSize;
+  const sourceWidth = Math.min(Math.max((eastWorld - westWorld) * esriTileSize, 1), mosaicWidth - sourceX);
+  const sourceHeight = Math.min(Math.max((southWorld - northWorld) * esriTileSize, 1), mosaicHeight - sourceY);
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.drawImage(
+    mosaicCanvas,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    0,
+    0,
+    width,
+    height,
+  );
+
+  try {
+    return canvas.toDataURL("image/png");
+  } catch {
+    return undefined;
+  }
 }
 
 function getRandomChinaStartView() {
@@ -472,11 +590,29 @@ export default function MapSelector() {
     const midLat = (south + north) / 2;
     const midLng = (west + east) / 2;
     const layers = await inferTerrainLayers(midLat, midLng);
-    const surfaceTextureUrl = buildMapboxSatelliteTextureUrl(
+    const mapboxSurfaceTextureUrl = buildMapboxSatelliteTextureUrl(
       bounds,
       process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
       process.env.NEXT_PUBLIC_MAPBOX_SURFACE_STYLE,
     );
+    const esriSurfaceTextureUrl = await buildEsriImageryTextureDataUrl(bounds);
+    const surfaceTextures: SurfaceTextureOption[] = [
+      ...(esriSurfaceTextureUrl ? [{
+        id: "esri",
+        label: "Esri",
+        url: esriSurfaceTextureUrl,
+        attribution: "Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+        provider: "esri" as const,
+      }] : []),
+      ...(mapboxSurfaceTextureUrl ? [{
+        id: "mapbox",
+        label: "Mapbox",
+        url: mapboxSurfaceTextureUrl,
+        attribution: "© Mapbox © OpenStreetMap © Maxar",
+        provider: "mapbox" as const,
+      }] : []),
+    ];
+    const defaultSurfaceTexture = surfaceTextures[0];
 
     setTerrainBlock({
       elevations,
@@ -484,9 +620,10 @@ export default function MapSelector() {
       minElevation,
       maxElevation,
       layers,
-      surfaceTextureUrl,
-      surfaceTextureLabel: surfaceTextureUrl ? "地表卫星贴图" : undefined,
-      surfaceAttribution: surfaceTextureUrl ? "© Mapbox © OpenStreetMap © Maxar" : undefined,
+      surfaceTextureUrl: defaultSurfaceTexture?.url,
+      surfaceTextureLabel: defaultSurfaceTexture ? "地表卫星贴图" : undefined,
+      surfaceAttribution: defaultSurfaceTexture?.attribution,
+      surfaceTextures,
     });
     setIsRenderingBlock(false);
   }, [inferTerrainLayers]);

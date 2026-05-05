@@ -39,6 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-public/textures/
+public/textures/*
+!public/textures/
+!public/textures/mantle-magma-smooth-seamless.png
+!public/textures/mantle-magma-strip-seamless.png
 __pycache__/
 *.pyc

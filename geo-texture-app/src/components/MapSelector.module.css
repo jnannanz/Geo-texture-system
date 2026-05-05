@@ -222,6 +222,170 @@
   pointer-events: none;
 }
 
+.surfaceTextureControl {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: grid;
+  gap: 7px;
+  width: 190px;
+  padding: 8px 10px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #17202a;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+.surfaceTextureControl label {
+  display: grid;
+  gap: 3px;
+}
+
+.surfaceTextureModes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.surfaceTextureModes button {
+  min-height: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.76);
+  color: #17202a;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.surfaceTextureModes .activeSurfaceTextureMode {
+  border-color: rgba(22, 163, 74, 0.5);
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.surfaceTextureControl input {
+  width: 100%;
+  accent-color: #16a34a;
+}
+
+.demControl {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  gap: 6px;
+  width: 172px;
+  padding: 8px 10px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #17202a;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.demControl input {
+  width: 100%;
+  accent-color: #38bdf8;
+}
+
+.exportRenderGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.exportRenderBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 32px;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  border-radius: 6px;
+  background: #17202a;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.exportRenderBtn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exportRenderBtn:hover {
+  background: #0f172a;
+}
+
+.exportRenderBtn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.sunControl {
+  position: absolute;
+  top: 154px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  gap: 7px;
+  width: 172px;
+  padding: 8px 10px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #17202a;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+.sunControl label {
+  display: grid;
+  gap: 3px;
+}
+
+.sunControl input {
+  width: 100%;
+  accent-color: #f59e0b;
+}
+
+.sunModeGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.sunModeGroup button {
+  min-width: 0;
+  min-height: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #17202a;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.sunModeGroup .activeSunMode {
+  border-color: rgba(245, 158, 11, 0.72);
+  background: #f59e0b;
+  color: #111827;
+}
+
 .terrainLegend {
   position: absolute;
   left: 16px;
