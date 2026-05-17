@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Download } from "lucide-react";
+import type { Geometry } from "geojson";
 import styles from "./MapSelector.module.css";
 
 export interface TerrainLayer {
@@ -18,6 +19,11 @@ export interface SurfaceTextureOption {
   url: string;
   attribution?: string;
   provider?: "esri" | "mapbox";
+}
+
+export interface TerrainWaterFeature {
+  geometry: Geometry;
+  source?: "osm";
 }
 
 export interface TerrainBlockData {
@@ -35,6 +41,8 @@ export interface TerrainBlockData {
   surfaceTextureLabel?: string;
   surfaceAttribution?: string;
   surfaceTextures?: SurfaceTextureOption[];
+  gridBaseTexture?: SurfaceTextureOption;
+  waterFeatures?: TerrainWaterFeature[];
 }
 
 interface TerrainBlock3DProps {
@@ -48,8 +56,22 @@ interface TerrainDimensions {
   reliefHeight: number;
 }
 
+interface SurfaceTextureSettings {
+  contrast: number;
+  saturation: number;
+  renderMode: SurfaceRenderMode;
+  gridLineColor: string;
+  gridFillColor: string;
+  gridPatchColor: string;
+  waterColor: string;
+  waterOpacity: number;
+  facetSize: number;
+  verticalExaggeration: number;
+}
+
 type SunPreset = "dawn" | "morning" | "day" | "evening";
 type ExportQuality = "normal" | "publication";
+type SurfaceRenderMode = "photo" | "grid" | "hybrid";
 
 const maxPlanSize = 16;
 const minPlanSize = 3.5;
@@ -76,6 +98,13 @@ const esriTileSize = 256;
 const defaultSatelliteTextureContrast = 1.2;
 const defaultSatelliteTextureSaturation = 1.38;
 const satelliteTextureBrightness = 1.04;
+const defaultSurfaceRenderMode: SurfaceRenderMode = "photo";
+const defaultGridLineColor = "#7fbe73";
+const defaultGridFillColor = "#f5fbef";
+const defaultGridPatchColor = "#70b967";
+const defaultWaterColor = "#60b96b";
+const defaultWaterOpacity = 0.72;
+const defaultFacetSize = 18;
 const defaultSunPreset: SunPreset = "day";
 const defaultSunIntensity = 3.2;
 
@@ -497,11 +526,324 @@ function drawExportLegend(canvas: HTMLCanvasElement, data: TerrainBlockData, act
   context.restore();
 }
 
-function enhanceSurfaceTexture(
+function parseHexColor(hex: string) {
+  const normalized = hex.replace("#", "");
+  const value = normalized.length === 3
+    ? normalized.split("").map((char) => char + char).join("")
+    : normalized.padEnd(6, "0").slice(0, 6);
+
+  return [
+    parseInt(value.slice(0, 2), 16),
+    parseInt(value.slice(2, 4), 16),
+    parseInt(value.slice(4, 6), 16),
+  ] as const;
+}
+
+function mixChannel(a: number, b: number, amount: number) {
+  return a + (b - a) * amount;
+}
+
+function getLuma(pixels: Uint8ClampedArray, index: number) {
+  return pixels[index] * 0.2126 + pixels[index + 1] * 0.7152 + pixels[index + 2] * 0.0722;
+}
+
+function blendPixel(pixels: Uint8ClampedArray, index: number, color: readonly number[], opacity: number) {
+  pixels[index] = clamp(mixChannel(pixels[index], color[0], opacity), 0, 255);
+  pixels[index + 1] = clamp(mixChannel(pixels[index + 1], color[1], opacity), 0, 255);
+  pixels[index + 2] = clamp(mixChannel(pixels[index + 2], color[2], opacity), 0, 255);
+}
+
+function getElevationAtGrid(data: TerrainBlockData, row: number, col: number) {
+  const rows = data.elevations.length;
+  const cols = data.elevations[0]?.length ?? 0;
+  const safeRow = clamp(Math.round(row), 0, rows - 1);
+  const safeCol = clamp(Math.round(col), 0, cols - 1);
+  return data.elevations[safeRow]?.[safeCol] ?? data.minElevation;
+}
+
+function getTerrainGridField(data: TerrainBlockData, xRatio: number, yRatio: number) {
+  const rows = data.elevations.length;
+  const cols = data.elevations[0]?.length ?? 0;
+  if (rows < 2 || cols < 2) return { angle: 0, slope: 0 };
+
+  const row = yRatio * (rows - 1);
+  const col = xRatio * (cols - 1);
+  const left = getElevationAtGrid(data, row, col - 1);
+  const right = getElevationAtGrid(data, row, col + 1);
+  const up = getElevationAtGrid(data, row - 1, col);
+  const down = getElevationAtGrid(data, row + 1, col);
+  const range = Math.max(data.maxElevation - data.minElevation, 1);
+  const dx = (right - left) / range;
+  const dy = (down - up) / range;
+  const slope = clamp(Math.hypot(dx, dy) * 3.6, 0, 1);
+  const angle = Math.atan2(dy, dx) + Math.PI / 2;
+
+  return { angle, slope };
+}
+
+function getElevationRatioAt(data: TerrainBlockData, xRatio: number, yRatio: number) {
+  const rows = data.elevations.length;
+  const cols = data.elevations[0]?.length ?? 0;
+  if (rows < 1 || cols < 1) return 0;
+
+  const elevation = getElevationAtGrid(data, yRatio * (rows - 1), xRatio * (cols - 1));
+  return clamp((elevation - data.minElevation) / Math.max(data.maxElevation - data.minElevation, 1), 0, 1);
+}
+
+function getWaterScore(red: number, green: number, blue: number, luma: number) {
+  const cyanRiver = clamp((blue * 0.72 + green * 0.92 - red * 1.28 - 44) / 116, 0, 1);
+  const brightMapWater = clamp((green + blue - red * 1.52 - 126) / 118, 0, 1);
+  const blueWater = clamp((blue * 1.12 - red * 1.16 + green * 0.24 - 32) / 108, 0, 1);
+  const darkWater = clamp((128 - luma) / 92, 0, 1) * clamp((blue + green - red * 1.68 - 18) / 116, 0, 1);
+  return clamp(Math.max(cyanRiver, brightMapWater, blueWater, darkWater), 0, 1);
+}
+
+function isLngLatPosition(value: unknown): value is [number, number, ...number[]] {
+  return Array.isArray(value) && typeof value[0] === "number" && typeof value[1] === "number";
+}
+
+function projectLngLatToTexture(
+  position: [number, number, ...number[]],
+  bounds: TerrainBlockData["bounds"],
+  width: number,
+  height: number,
+) {
+  const westX = normalizedMercatorX(bounds.west);
+  const eastX = normalizedMercatorX(bounds.east);
+  const northY = normalizedMercatorYForTexture(bounds.north);
+  const southY = normalizedMercatorYForTexture(bounds.south);
+  const xRatio = (normalizedMercatorX(position[0]) - westX) / Math.max(eastX - westX, 0.000001);
+  const yRatio = (normalizedMercatorYForTexture(position[1]) - northY) / Math.max(southY - northY, 0.000001);
+
+  return {
+    x: xRatio * width,
+    y: yRatio * height,
+  };
+}
+
+function drawLineStringToTexture(
+  context: CanvasRenderingContext2D,
+  coordinates: unknown,
+  data: TerrainBlockData,
+  width: number,
+  height: number,
+) {
+  if (!Array.isArray(coordinates) || coordinates.length < 2) return;
+
+  coordinates.forEach((position, index) => {
+    if (!isLngLatPosition(position)) return;
+    const point = projectLngLatToTexture(position, data.bounds, width, height);
+    if (index === 0) {
+      context.moveTo(point.x, point.y);
+    } else {
+      context.lineTo(point.x, point.y);
+    }
+  });
+}
+
+function drawPolygonToTexture(
+  context: CanvasRenderingContext2D,
+  coordinates: unknown,
+  data: TerrainBlockData,
+  width: number,
+  height: number,
+) {
+  if (!Array.isArray(coordinates)) return;
+
+  coordinates.forEach((ring) => {
+    if (!Array.isArray(ring) || ring.length < 3) return;
+    ring.forEach((position, index) => {
+      if (!isLngLatPosition(position)) return;
+      const point = projectLngLatToTexture(position, data.bounds, width, height);
+      if (index === 0) {
+        context.moveTo(point.x, point.y);
+      } else {
+        context.lineTo(point.x, point.y);
+      }
+    });
+    context.closePath();
+  });
+}
+
+function drawWaterFeatures(
+  context: CanvasRenderingContext2D,
+  data: TerrainBlockData,
+  width: number,
+  height: number,
+  color: string,
+  opacity: number,
+) {
+  if (!data.waterFeatures?.length) return;
+
+  context.save();
+  context.globalAlpha = opacity;
+  context.fillStyle = color;
+  context.strokeStyle = color;
+  context.lineWidth = clamp(Math.min(width, height) * 0.0038, 1.2, 6);
+  context.lineCap = "round";
+  context.lineJoin = "round";
+
+  data.waterFeatures.forEach((feature) => {
+    const { geometry } = feature;
+    context.beginPath();
+
+    if (geometry.type === "Polygon") {
+      drawPolygonToTexture(context, geometry.coordinates, data, width, height);
+      context.fill("evenodd");
+      return;
+    }
+
+    if (geometry.type === "MultiPolygon") {
+      geometry.coordinates.forEach((polygon) => drawPolygonToTexture(context, polygon, data, width, height));
+      context.fill("evenodd");
+      return;
+    }
+
+    if (geometry.type === "LineString") {
+      drawLineStringToTexture(context, geometry.coordinates, data, width, height);
+      context.stroke();
+      return;
+    }
+
+    if (geometry.type === "MultiLineString") {
+      geometry.coordinates.forEach((line) => drawLineStringToTexture(context, line, data, width, height));
+      context.stroke();
+    }
+  });
+
+  context.restore();
+}
+
+function drawDetectedWaterOverlay(
+  context: CanvasRenderingContext2D,
+  sourcePixels: Uint8ClampedArray,
+  width: number,
+  height: number,
+  color: string,
+  opacity: number,
+) {
+  const imageData = context.getImageData(0, 0, width, height);
+  const pixels = imageData.data;
+  const waterColor = parseHexColor(color);
+
+  for (let index = 0; index < pixels.length; index += 4) {
+    const red = sourcePixels[index];
+    const green = sourcePixels[index + 1];
+    const blue = sourcePixels[index + 2];
+    const luma = getLuma(sourcePixels, index);
+    const waterScore = getWaterScore(red, green, blue, luma);
+    if (waterScore <= 0.2) continue;
+
+    const waterOpacity = clamp((waterScore - 0.2) / 0.8, 0, 1) * opacity * 0.45;
+    blendPixel(pixels, index, waterColor, waterOpacity);
+  }
+
+  context.putImageData(imageData, 0, 0);
+}
+
+function drawTerrainFacets(
+  context: CanvasRenderingContext2D,
+  data: TerrainBlockData,
+  width: number,
+  height: number,
+  settings: SurfaceTextureSettings,
+) {
+  const lineColor = settings.gridLineColor;
+  const fillColor = settings.gridFillColor;
+  const patchColor = settings.gridPatchColor;
+  const exaggerationRatio = clamp(settings.verticalExaggeration / defaultTerrainVerticalExaggeration, 0.45, 2.2);
+  const step = clamp(settings.facetSize * (1.08 - exaggerationRatio * 0.08), 8, 42);
+  const cols = Math.ceil(width / step) + 2;
+  const rows = Math.ceil(height / step) + 2;
+  const originX = -step;
+  const originY = -step;
+  const fillOpacity = settings.renderMode === "grid" ? 0.34 : 0.08;
+  const patchOpacityBase = settings.renderMode === "grid" ? 0.24 : 0.1;
+  const strokeOpacityBase = settings.renderMode === "grid" ? 0.62 : 0.36;
+
+  const pointAt = (row: number, col: number) => {
+    const baseX = originX + col * step;
+    const baseY = originY + row * step;
+    const xRatio = clamp(baseX / Math.max(width, 1), 0, 1);
+    const yRatio = clamp(baseY / Math.max(height, 1), 0, 1);
+    const terrainField = getTerrainGridField(data, xRatio, yRatio);
+    const elevationRatio = getElevationRatioAt(data, xRatio, yRatio);
+    const contourAngle = terrainField.angle;
+    const slopeAngle = contourAngle - Math.PI / 2;
+    const band = Math.sin(elevationRatio * Math.PI * (7.5 + exaggerationRatio * 3.2) + col * 0.18);
+    const terrace = Math.sin((baseX * Math.cos(contourAngle) + baseY * Math.sin(contourAngle)) / Math.max(step * 2.15, 1));
+    const terrainCompression = terrainField.slope * step * (0.45 + exaggerationRatio * 0.48);
+    const contourShift = (band * 0.42 + terrace * 0.3) * terrainCompression;
+    const slopeShift = Math.sin(elevationRatio * Math.PI * 5.5 + row * 0.22) * terrainField.slope * step * 0.32 * exaggerationRatio;
+    const microJitter = (
+      Math.sin(row * 12.9898 + col * 78.233) +
+      Math.cos(row * 37.719 + col * 19.17)
+    ) * step * 0.025 * (1 + terrainField.slope);
+
+    return {
+      x:
+        baseX +
+        Math.cos(contourAngle) * contourShift +
+        Math.cos(slopeAngle) * slopeShift +
+        microJitter,
+      y:
+        baseY +
+        Math.sin(contourAngle) * contourShift +
+        Math.sin(slopeAngle) * slopeShift +
+        microJitter * 0.45,
+    };
+  };
+
+  context.save();
+  context.lineJoin = "round";
+  context.lineCap = "round";
+
+  for (let row = 0; row < rows - 1; row++) {
+    for (let col = 0; col < cols - 1; col++) {
+      const p00 = pointAt(row, col);
+      const p10 = pointAt(row, col + 1);
+      const p11 = pointAt(row + 1, col + 1);
+      const p01 = pointAt(row + 1, col);
+      const centerXRatio = clamp((p00.x + p10.x + p11.x + p01.x) / 4 / Math.max(width, 1), 0, 1);
+      const centerYRatio = clamp((p00.y + p10.y + p11.y + p01.y) / 4 / Math.max(height, 1), 0, 1);
+      const terrainField = getTerrainGridField(data, centerXRatio, centerYRatio);
+      const elevationRatio = getElevationRatioAt(data, centerXRatio, centerYRatio);
+      const bandStrength = Math.abs(Math.sin(elevationRatio * Math.PI * (8 + exaggerationRatio * 3)));
+      const patchOpacity = patchOpacityBase * (0.22 + elevationRatio * 0.24 + terrainField.slope * 0.72 + bandStrength * 0.28) * exaggerationRatio;
+      const strokeOpacity = clamp(strokeOpacityBase * (0.58 + terrainField.slope * 1.05 + bandStrength * 0.32) * exaggerationRatio, 0.16, 0.9);
+
+      context.beginPath();
+      context.moveTo(p00.x, p00.y);
+      context.lineTo(p10.x, p10.y);
+      context.lineTo(p11.x, p11.y);
+      context.lineTo(p01.x, p01.y);
+      context.closePath();
+
+      if (fillOpacity > 0) {
+        context.globalAlpha = fillOpacity;
+        context.fillStyle = fillColor;
+        context.fill();
+      }
+
+      context.globalAlpha = clamp(patchOpacity, 0, 0.42);
+      context.fillStyle = patchColor;
+      context.fill();
+
+      context.globalAlpha = strokeOpacity;
+      context.strokeStyle = lineColor;
+      context.lineWidth = clamp(0.55 + (terrainField.slope * 0.92 + bandStrength * 0.24) * exaggerationRatio, 0.55, 1.9);
+      context.stroke();
+    }
+  }
+
+  context.restore();
+}
+
+function renderSurfaceTexture(
   sourceTexture: THREE.Texture,
   maxAnisotropy: number,
-  contrast: number,
-  saturation: number,
+  settings: SurfaceTextureSettings,
+  data: TerrainBlockData,
 ) {
   const image = sourceTexture.image as CanvasImageSource & {
     width?: number;
@@ -523,6 +865,9 @@ function enhanceSurfaceTexture(
     context.drawImage(image, 0, 0, width, height);
     const imageData = context.getImageData(0, 0, width, height);
     const pixels = imageData.data;
+    const sourcePixels = new Uint8ClampedArray(pixels);
+    const fillColor = parseHexColor(settings.gridFillColor);
+    const patchColor = parseHexColor(settings.gridPatchColor);
 
     for (let index = 0; index < pixels.length; index += 4) {
       let red = pixels[index] * satelliteTextureBrightness;
@@ -530,16 +875,51 @@ function enhanceSurfaceTexture(
       let blue = pixels[index + 2] * satelliteTextureBrightness;
       const luma = red * 0.2126 + green * 0.7152 + blue * 0.0722;
 
-      red = luma + (red - luma) * saturation;
-      green = luma + (green - luma) * saturation;
-      blue = luma + (blue - luma) * saturation;
+      red = luma + (red - luma) * settings.saturation;
+      green = luma + (green - luma) * settings.saturation;
+      blue = luma + (blue - luma) * settings.saturation;
 
-      pixels[index] = clamp((red - 128) * contrast + 128, 0, 255);
-      pixels[index + 1] = clamp((green - 128) * contrast + 128, 0, 255);
-      pixels[index + 2] = clamp((blue - 128) * contrast + 128, 0, 255);
+      pixels[index] = clamp((red - 128) * settings.contrast + 128, 0, 255);
+      pixels[index + 1] = clamp((green - 128) * settings.contrast + 128, 0, 255);
+      pixels[index + 2] = clamp((blue - 128) * settings.contrast + 128, 0, 255);
+    }
+
+    if (settings.renderMode !== "photo") {
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const index = (y * width + x) * 4;
+          const red = sourcePixels[index];
+          const green = sourcePixels[index + 1];
+          const blue = sourcePixels[index + 2];
+          const luma = getLuma(sourcePixels, index);
+          const xRatio = x / Math.max(width - 1, 1);
+          const yRatio = y / Math.max(height - 1, 1);
+          const terrainField = getTerrainGridField(data, xRatio, yRatio);
+          const elevationRatio = getElevationRatioAt(data, xRatio, yRatio);
+          const greenScore = clamp((green - red * 0.42 - blue * 0.28 + 34) / 118, 0, 1);
+          const waterScore = getWaterScore(red, green, blue, luma);
+          const patchAmount = clamp(
+            greenScore * 0.28 + elevationRatio * 0.22 + terrainField.slope * 0.34 - waterScore * 0.45,
+            0,
+            0.72,
+          );
+
+          if (settings.renderMode === "grid") {
+            blendPixel(pixels, index, fillColor, 0.68);
+            blendPixel(pixels, index, patchColor, patchAmount * 0.32);
+          } else {
+            blendPixel(pixels, index, patchColor, patchAmount * 0.16);
+          }
+        }
+      }
     }
 
     context.putImageData(imageData, 0, 0);
+    if (settings.renderMode !== "photo") {
+      drawTerrainFacets(context, data, width, height, settings);
+      drawDetectedWaterOverlay(context, sourcePixels, width, height, settings.waterColor, settings.waterOpacity);
+      drawWaterFeatures(context, data, width, height, settings.waterColor, settings.waterOpacity);
+    }
     const enhancedTexture = new THREE.CanvasTexture(canvas);
     configureSurfaceTexture(enhancedTexture, maxAnisotropy);
     return enhancedTexture;
@@ -725,9 +1105,23 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
   const sunIntensityRef = useRef(defaultSunIntensity);
   const surfaceContrastRef = useRef(defaultSatelliteTextureContrast);
   const surfaceSaturationRef = useRef(defaultSatelliteTextureSaturation);
+  const surfaceRenderModeRef = useRef<SurfaceRenderMode>(defaultSurfaceRenderMode);
+  const gridLineColorRef = useRef(defaultGridLineColor);
+  const gridFillColorRef = useRef(defaultGridFillColor);
+  const gridPatchColorRef = useRef(defaultGridPatchColor);
+  const waterColorRef = useRef(defaultWaterColor);
+  const waterOpacityRef = useRef(defaultWaterOpacity);
+  const facetSizeRef = useRef(defaultFacetSize);
   const [verticalExaggeration, setVerticalExaggeration] = useState(defaultTerrainVerticalExaggeration);
   const [surfaceContrast, setSurfaceContrast] = useState(defaultSatelliteTextureContrast);
   const [surfaceSaturation, setSurfaceSaturation] = useState(defaultSatelliteTextureSaturation);
+  const [surfaceRenderMode, setSurfaceRenderMode] = useState<SurfaceRenderMode>(defaultSurfaceRenderMode);
+  const [gridLineColor, setGridLineColor] = useState(defaultGridLineColor);
+  const [gridFillColor, setGridFillColor] = useState(defaultGridFillColor);
+  const [gridPatchColor, setGridPatchColor] = useState(defaultGridPatchColor);
+  const [waterColor, setWaterColor] = useState(defaultWaterColor);
+  const [waterOpacity, setWaterOpacity] = useState(defaultWaterOpacity);
+  const [facetSize, setFacetSize] = useState(defaultFacetSize);
   const [sunPreset, setSunPreset] = useState<SunPreset>(defaultSunPreset);
   const [sunIntensity, setSunIntensity] = useState(defaultSunIntensity);
   const [exportQuality, setExportQuality] = useState<ExportQuality | null>(null);
@@ -745,14 +1139,18 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
   ), [data.surfaceAttribution, data.surfaceTextureLabel, data.surfaceTextureUrl, data.surfaceTextures]);
   const [activeSurfaceTextureId, setActiveSurfaceTextureId] = useState(surfaceTextureOptions[0]?.id ?? "");
   const activeSurfaceTexture = surfaceTextureOptions.find((option) => option.id === activeSurfaceTextureId) ?? surfaceTextureOptions[0];
+  const renderSurfaceTextureOption =
+    surfaceRenderMode === "grid" && data.gridBaseTexture
+      ? data.gridBaseTexture
+      : activeSurfaceTexture;
 
-  const applySurfaceTextureSettings = useCallback((contrast: number, saturation: number) => {
+  const applySurfaceTextureSettings = useCallback((settings: SurfaceTextureSettings) => {
     const surfaceMaterial = surfaceMaterialRef.current;
     const sourceTexture = surfaceSourceTextureRef.current;
     if (!surfaceMaterial || !sourceTexture) return;
 
     const previousTexture = enhancedSurfaceTextureRef.current;
-    const nextTexture = enhanceSurfaceTexture(sourceTexture, maxAnisotropyRef.current, contrast, saturation);
+    const nextTexture = renderSurfaceTexture(sourceTexture, maxAnisotropyRef.current, settings, data);
     if (nextTexture === sourceTexture) {
       configureSurfaceTexture(sourceTexture, maxAnisotropyRef.current);
     }
@@ -766,7 +1164,7 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
     if (previousTexture && previousTexture !== sourceTexture && previousTexture !== nextTexture) {
       previousTexture.dispose();
     }
-  }, []);
+  }, [data]);
 
   const updateSunPreset = (preset: SunPreset) => {
     sunPresetRef.current = preset;
@@ -819,9 +1217,9 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
     setExportQuality(quality);
 
     try {
-      if (surfaceMaterial && activeSurfaceTexture) {
+      if (surfaceMaterial && renderSurfaceTextureOption) {
         const exportTextureUrl = await buildExportSurfaceTextureUrl(
-          activeSurfaceTexture,
+          renderSurfaceTextureOption,
           data.bounds,
           exportWidth,
           exportHeight,
@@ -830,11 +1228,22 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
         );
         exportSourceTexture = await loadThreeTexture(exportTextureUrl);
         configureSurfaceTexture(exportSourceTexture, maxAnisotropyRef.current);
-        exportEnhancedTexture = enhanceSurfaceTexture(
+        exportEnhancedTexture = renderSurfaceTexture(
           exportSourceTexture,
           maxAnisotropyRef.current,
-          surfaceContrastRef.current,
-          surfaceSaturationRef.current,
+          {
+            contrast: surfaceContrastRef.current,
+            saturation: surfaceSaturationRef.current,
+            renderMode: surfaceRenderModeRef.current,
+            gridLineColor: gridLineColorRef.current,
+            gridFillColor: gridFillColorRef.current,
+            gridPatchColor: gridPatchColorRef.current,
+            waterColor: waterColorRef.current,
+            waterOpacity: waterOpacityRef.current,
+            facetSize: facetSizeRef.current,
+            verticalExaggeration,
+          },
+          data,
         );
         surfaceMaterial.map = exportEnhancedTexture;
         surfaceMaterial.vertexColors = false;
@@ -849,7 +1258,7 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
       controls?.update();
       renderer.render(scene, camera);
 
-      const outputCanvas = composeExportCanvas(renderer.domElement, data, activeSurfaceTexture);
+      const outputCanvas = composeExportCanvas(renderer.domElement, data, renderSurfaceTextureOption);
       const blob = await canvasToPngBlob(outputCanvas);
       if (!blob) return;
       const url = URL.createObjectURL(blob);
@@ -1054,14 +1463,44 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
   useEffect(() => {
     surfaceContrastRef.current = surfaceContrast;
     surfaceSaturationRef.current = surfaceSaturation;
-    applySurfaceTextureSettings(surfaceContrast, surfaceSaturation);
-  }, [applySurfaceTextureSettings, surfaceContrast, surfaceSaturation]);
+    surfaceRenderModeRef.current = surfaceRenderMode;
+    gridLineColorRef.current = gridLineColor;
+    gridFillColorRef.current = gridFillColor;
+    gridPatchColorRef.current = gridPatchColor;
+    waterColorRef.current = waterColor;
+    waterOpacityRef.current = waterOpacity;
+    facetSizeRef.current = facetSize;
+    applySurfaceTextureSettings({
+      contrast: surfaceContrast,
+      saturation: surfaceSaturation,
+      renderMode: surfaceRenderMode,
+      gridLineColor,
+      gridFillColor,
+      gridPatchColor,
+      waterColor,
+      waterOpacity,
+      facetSize,
+      verticalExaggeration,
+    });
+  }, [
+    applySurfaceTextureSettings,
+    facetSize,
+    gridFillColor,
+    gridLineColor,
+    gridPatchColor,
+    surfaceContrast,
+    surfaceRenderMode,
+    surfaceSaturation,
+    verticalExaggeration,
+    waterColor,
+    waterOpacity,
+  ]);
 
   useEffect(() => {
     const surfaceMaterial = surfaceMaterialRef.current;
     if (!surfaceMaterial) return;
 
-    if (!activeSurfaceTexture) {
+    if (!renderSurfaceTextureOption) {
       const sourceTexture = surfaceSourceTextureRef.current;
       const enhancedTexture = enhancedSurfaceTextureRef.current;
       if (enhancedTexture && enhancedTexture !== sourceTexture) enhancedTexture.dispose();
@@ -1078,7 +1517,7 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
     const textureLoader = new THREE.TextureLoader();
     textureLoader.setCrossOrigin("anonymous");
     textureLoader.load(
-      activeSurfaceTexture.url,
+      renderSurfaceTextureOption.url,
       (texture) => {
         if (isCancelled) {
           texture.dispose();
@@ -1090,7 +1529,18 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
         surfaceSourceTextureRef.current = texture;
         enhancedSurfaceTextureRef.current = null;
         configureSurfaceTexture(texture, maxAnisotropyRef.current);
-        applySurfaceTextureSettings(surfaceContrastRef.current, surfaceSaturationRef.current);
+        applySurfaceTextureSettings({
+          contrast: surfaceContrastRef.current,
+          saturation: surfaceSaturationRef.current,
+          renderMode: surfaceRenderModeRef.current,
+          gridLineColor: gridLineColorRef.current,
+          gridFillColor: gridFillColorRef.current,
+          gridPatchColor: gridPatchColorRef.current,
+          waterColor: waterColorRef.current,
+          waterOpacity: waterOpacityRef.current,
+          facetSize: facetSizeRef.current,
+          verticalExaggeration,
+        });
 
         if (previousEnhancedTexture && previousEnhancedTexture !== previousSourceTexture) {
           previousEnhancedTexture.dispose();
@@ -1109,7 +1559,7 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
     return () => {
       isCancelled = true;
     };
-  }, [activeSurfaceTexture, applySurfaceTextureSettings, verticalExaggeration]);
+  }, [applySurfaceTextureSettings, renderSurfaceTextureOption, verticalExaggeration]);
 
   useEffect(() => {
     sunPresetRef.current = sunPreset;
@@ -1126,8 +1576,8 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
   return (
     <div className={styles.terrainViewer}>
       <div ref={mountRef} className={styles.threeCanvas} />
-      {activeSurfaceTexture?.attribution && (
-        <div className={styles.surfaceAttribution}>{activeSurfaceTexture.attribution}</div>
+      {renderSurfaceTextureOption?.attribution && (
+        <div className={styles.surfaceAttribution}>{renderSurfaceTextureOption.attribution}</div>
       )}
       {surfaceTextureOptions.length > 0 && (
         <div className={styles.surfaceTextureControl}>
@@ -1139,6 +1589,22 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
                 className={option.id === activeSurfaceTexture?.id ? styles.activeSurfaceTextureMode : ""}
                 type="button"
                 onClick={() => setActiveSurfaceTextureId(option.id)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <div className={styles.surfaceRenderModes} role="group" aria-label="顶面贴图样式">
+            {[
+              { value: "photo", label: "卫星" },
+              { value: "grid", label: "网格" },
+              { value: "hybrid", label: "混合" },
+            ].map((option) => (
+              <button
+                key={option.value}
+                className={surfaceRenderMode === option.value ? styles.activeSurfaceRenderMode : ""}
+                type="button"
+                onClick={() => setSurfaceRenderMode(option.value as SurfaceRenderMode)}
               >
                 {option.label}
               </button>
@@ -1168,6 +1634,70 @@ export default function TerrainBlock3D({ data }: TerrainBlock3DProps) {
               onChange={(event) => setSurfaceSaturation(Number(event.target.value))}
             />
           </label>
+          {surfaceRenderMode !== "photo" && (
+            <div className={styles.surfaceColorControls}>
+              <label>
+                <span>线色</span>
+                <input
+                  aria-label="网格线色"
+                  type="color"
+                  value={gridLineColor}
+                  onChange={(event) => setGridLineColor(event.target.value)}
+                />
+              </label>
+              <label>
+                <span>底色</span>
+                <input
+                  aria-label="网格底色"
+                  type="color"
+                  value={gridFillColor}
+                  onChange={(event) => setGridFillColor(event.target.value)}
+                />
+              </label>
+              <label>
+                <span>块面</span>
+                <input
+                  aria-label="网格块面色"
+                  type="color"
+                  value={gridPatchColor}
+                  onChange={(event) => setGridPatchColor(event.target.value)}
+                />
+              </label>
+              <label>
+                <span>水体</span>
+                <input
+                  aria-label="水体颜色"
+                  type="color"
+                  value={waterColor}
+                  onChange={(event) => setWaterColor(event.target.value)}
+                />
+              </label>
+              <label className={styles.surfaceWaterStrength}>
+                <span>水体强度 {waterOpacity.toFixed(2)}x</span>
+                <input
+                  aria-label="水体设色强度"
+                  type="range"
+                  min="0.2"
+                  max="1"
+                  step="0.05"
+                  value={waterOpacity}
+                  onChange={(event) => setWaterOpacity(Number(event.target.value))}
+                />
+              </label>
+              <label className={styles.surfaceFacetSize}>
+                <span>面片大小 {facetSize.toFixed(0)}px</span>
+                <input
+                  aria-label="地形面片大小"
+                  type="range"
+                  min="8"
+                  max="42"
+                  step="1"
+                  value={facetSize}
+                  onChange={(event) => setFacetSize(Number(event.target.value))}
+                />
+              </label>
+            </div>
+          )}
         </div>
       )}
       <div className={styles.demControl}>

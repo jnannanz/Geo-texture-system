@@ -9,12 +9,33 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import * as d3 from "d3";
 import type { Feature, Polygon } from "geojson";
-import TerrainBlock3D, { type SurfaceTextureOption, type TerrainBlockData, type TerrainLayer } from "./TerrainBlock3D";
+import TerrainBlock3D, {
+  type SurfaceTextureOption,
+  type TerrainBlockData,
+  type TerrainLayer,
+  type TerrainWaterFeature,
+} from "./TerrainBlock3D";
 
 interface MacrostratUnit {
   best_int_name?: string;
   lith?: string;
   color?: string;
+}
+
+interface OverpassCoordinate {
+  lat: number;
+  lon: number;
+}
+
+interface OverpassElement {
+  type: "way" | "relation";
+  id: number;
+  tags?: Record<string, string>;
+  geometry?: OverpassCoordinate[];
+}
+
+interface OverpassResponse {
+  elements?: OverpassElement[];
 }
 
 const fallbackAgeColors = {
@@ -28,6 +49,11 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
+function setMapCursor(mapInstance: mapboxgl.Map, cursor: string) {
+  const canvas = mapInstance.getCanvas();
+  if (canvas) canvas.style.cursor = cursor;
+}
+
 const selectionSourceId = "terrain-block-selection-source";
 const selectionFillLayerId = "terrain-block-selection-fill";
 const selectionOutlineLayerId = "terrain-block-selection-outline";
@@ -38,6 +64,7 @@ const maxEsriTextureZoom = 16;
 const minEsriTextureZoom = 8;
 const esriTileSize = 256;
 const defaultSurfaceTextureStyle = "bag326/cluwjr06f002o01pphuck9mrm";
+const defaultGridBaseTextureStyle = "mapbox/outdoors-v12";
 const chinaStartCenters: Array<[number, number]> = [
   [116.4074, 39.9042],
   [121.4737, 31.2304],
@@ -186,7 +213,7 @@ function getSatelliteTextureSize(bounds: TerrainBlockData["bounds"]) {
   };
 }
 
-function buildMapboxSatelliteTextureUrl(bounds: TerrainBlockData["bounds"], token?: string, stylePath = defaultSurfaceTextureStyle) {
+function buildMapboxStaticTextureUrl(bounds: TerrainBlockData["bounds"], token?: string, stylePath = defaultSurfaceTextureStyle) {
   if (!token) return undefined;
 
   const { width, height } = getSatelliteTextureSize(bounds);
@@ -320,6 +347,90 @@ function getRandomChinaStartView() {
     center: [lng + lngJitter, lat + latJitter] as [number, number],
     zoom: 8.8 + Math.random() * 2.2,
   };
+}
+
+function toLngLatLine(geometry?: OverpassCoordinate[]) {
+  return geometry
+    ?.filter((point) => Number.isFinite(point.lon) && Number.isFinite(point.lat))
+    .map((point): [number, number] => [point.lon, point.lat]) ?? [];
+}
+
+function closeRing(line: Array<[number, number]>) {
+  if (line.length < 3) return line;
+  const first = line[0];
+  const last = line[line.length - 1];
+  if (first[0] === last[0] && first[1] === last[1]) return line;
+  return [...line, first];
+}
+
+function isClosedLine(line: Array<[number, number]>) {
+  if (line.length < 4) return false;
+  const first = line[0];
+  const last = line[line.length - 1];
+  return first[0] === last[0] && first[1] === last[1];
+}
+
+function overpassElementToWaterFeature(element: OverpassElement): TerrainWaterFeature | null {
+  if (element.type !== "way") return null;
+
+  const line = toLngLatLine(element.geometry);
+  if (line.length < 2) return null;
+
+  if (isClosedLine(line)) {
+    const ring = closeRing(line);
+    return ring.length >= 4
+      ? { source: "osm", geometry: { type: "Polygon", coordinates: [ring] } }
+      : null;
+  }
+
+  return { source: "osm", geometry: { type: "LineString", coordinates: line } };
+}
+
+async function fetchOsmWaterFeatures(bounds: TerrainBlockData["bounds"]): Promise<TerrainWaterFeature[]> {
+  const bbox = `${bounds.south},${bounds.west},${bounds.north},${bounds.east}`;
+  const query = `
+    [out:json][timeout:18];
+    (
+      way["natural"="water"](${bbox});
+      way["landuse"="reservoir"](${bbox});
+      way["landuse"="basin"](${bbox});
+      way["water"](${bbox});
+      way["waterway"~"river|stream|canal|ditch"](${bbox});
+    );
+    out geom;
+  `;
+  const endpoints = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: query,
+      });
+      if (!response.ok) continue;
+
+      const data = await response.json() as OverpassResponse;
+      const seen = new Set<string>();
+      return (data.elements ?? []).reduce<TerrainWaterFeature[]>((features, element) => {
+        const feature = overpassElementToWaterFeature(element);
+        if (!feature) return features;
+
+        const key = `${element.type}:${element.id}`;
+        if (seen.has(key)) return features;
+        seen.add(key);
+        features.push(feature);
+        return features;
+      }, []);
+    } catch {
+      // Try the next public Overpass mirror.
+    }
+  }
+
+  return [];
 }
 
 export default function MapSelector() {
@@ -589,13 +700,28 @@ export default function MapSelector() {
 
     const midLat = (south + north) / 2;
     const midLng = (west + east) / 2;
-    const layers = await inferTerrainLayers(midLat, midLng);
-    const mapboxSurfaceTextureUrl = buildMapboxSatelliteTextureUrl(
+    const [layers, waterFeatures] = await Promise.all([
+      inferTerrainLayers(midLat, midLng),
+      fetchOsmWaterFeatures(bounds),
+    ]);
+    const mapboxSurfaceTextureUrl = buildMapboxStaticTextureUrl(
       bounds,
       process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
       process.env.NEXT_PUBLIC_MAPBOX_SURFACE_STYLE,
     );
+    const gridBaseTextureUrl = buildMapboxStaticTextureUrl(
+      bounds,
+      process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
+      defaultGridBaseTextureStyle,
+    );
     const esriSurfaceTextureUrl = await buildEsriImageryTextureDataUrl(bounds);
+    const gridBaseTexture = gridBaseTextureUrl ? {
+      id: "mapbox-outdoors-grid-base",
+      label: "Mapbox 地图",
+      url: gridBaseTextureUrl,
+      attribution: "© Mapbox © OpenStreetMap",
+      provider: "mapbox" as const,
+    } : undefined;
     const surfaceTextures: SurfaceTextureOption[] = [
       ...(esriSurfaceTextureUrl ? [{
         id: "esri",
@@ -624,6 +750,8 @@ export default function MapSelector() {
       surfaceTextureLabel: defaultSurfaceTexture ? "地表卫星贴图" : undefined,
       surfaceAttribution: defaultSurfaceTexture?.attribution,
       surfaceTextures,
+      gridBaseTexture,
+      waterFeatures,
     });
     setIsRenderingBlock(false);
   }, [inferTerrainLayers]);
@@ -633,12 +761,12 @@ export default function MapSelector() {
     const currentMap = map.current;
 
     if (!isSelectingBlock) {
-      currentMap.getCanvas().style.cursor = "";
+      setMapCursor(currentMap, "");
       return;
     }
 
     draw.current?.changeMode("simple_select");
-    currentMap.getCanvas().style.cursor = "crosshair";
+    setMapCursor(currentMap, "crosshair");
 
     const handleMouseDown = (event: mapboxgl.MapMouseEvent) => {
       if (!ensureSelectionLayers()) return;
@@ -657,7 +785,7 @@ export default function MapSelector() {
       const start = rectangleStart.current;
       rectangleStart.current = null;
       currentMap.dragPan.enable();
-      currentMap.getCanvas().style.cursor = "";
+      setMapCursor(currentMap, "");
       setIsSelectingBlock(false);
       updateSelectionRectangle(createSelectionFeature(start, event.lngLat));
       void buildTerrainBlock(start, event.lngLat);
@@ -672,7 +800,7 @@ export default function MapSelector() {
       currentMap.off("mousemove", handleMouseMove);
       currentMap.off("mouseup", handleMouseUp);
       currentMap.dragPan.enable();
-      currentMap.getCanvas().style.cursor = "";
+      setMapCursor(currentMap, "");
     };
   }, [buildTerrainBlock, ensureSelectionLayers, isSelectingBlock, updateSelectionRectangle]);
 
